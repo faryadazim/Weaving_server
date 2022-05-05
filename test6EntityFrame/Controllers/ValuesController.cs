@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DAL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -7,16 +8,20 @@ using System.Web.Http;
 
 namespace test6EntityFrame.Controllers
 {
-    [Authorize]
+   
     public class ValuesController : ApiController
     {
+        private db_weavingEntities db = new db_weavingEntities();
         // GET api/values
-        public IEnumerable<string> Get()
+        [Authorize(Roles = "Cashier")]
+        public IHttpActionResult Get()
         {
-            return new string[] { "value1", "value2" };
+            var data = db.Modules.ToList();
+            return Ok(data);
         }
 
         // GET api/values/5
+        [Authorize(Roles = "Admin")]
         public string Get(int id)
         {
             return "value";
