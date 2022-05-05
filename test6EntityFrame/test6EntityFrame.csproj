@@ -221,7 +221,6 @@
     <Compile Include="Controllers\RolesController.cs" />
     <Compile Include="Controllers\UserRolesController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
