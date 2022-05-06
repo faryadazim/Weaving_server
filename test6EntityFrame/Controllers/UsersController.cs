@@ -13,6 +13,7 @@ using DAL;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using test6EntityFrame.Models;
+using WebApplication5.Models;
 
 namespace test6EntityFrame.Controllers
 {
@@ -135,7 +136,7 @@ namespace test6EntityFrame.Controllers
 
              
         [Route("api/Users")]
-        public IHttpActionResult async(string email, string password, string userName , string phoneNumber)
+        public IHttpActionResult async(UserDataModel model)
        // public async Task<IHttpActionResult> Register(int param_ID  )
         {
             if (!ModelState.IsValid)
@@ -143,9 +144,9 @@ namespace test6EntityFrame.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() {Id = Guid.NewGuid().ToString("N"), UserName = userName, Email = email  , PhoneNumber = phoneNumber  };
+            var user = new ApplicationUser() {Id = Guid.NewGuid().ToString("N"), UserName = model.userName, Email = model.email  , PhoneNumber = model.phoneNumber  };
 
-            IdentityResult result =  UserManager.Create(user, password);
+            IdentityResult result =  UserManager.Create(user,model.password);
 
             if (!result.Succeeded)
             {
@@ -160,7 +161,7 @@ namespace test6EntityFrame.Controllers
 
             };
 
-            return Ok(user);
+            return Ok(groupJoin);
         }
 
         private IHttpActionResult GetErrorResult(IdentityResult result)
