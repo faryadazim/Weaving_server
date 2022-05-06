@@ -39,10 +39,10 @@ namespace test6EntityFrame.Controllers
         [ResponseType(typeof(void))]
         public IHttpActionResult PutModules(int id, Modules modules)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest(ModelState);
+            //}
 
             if (id != modules.module_id)
             {

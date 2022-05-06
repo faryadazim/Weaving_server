@@ -51,8 +51,6 @@ namespace test6EntityFrame.Controllers
                             passwordHash = userDB.PasswordHash,
                             role = uRole.RoleId,
                             roleName = Role.Name
-
-
                         });
             return Ok(user);
         }
@@ -153,7 +151,7 @@ namespace test6EntityFrame.Controllers
                 return GetErrorResult(result);
             }
 
-            return Ok();
+            return Ok(result);
         }
 
         private IHttpActionResult GetErrorResult(IdentityResult result)
