@@ -146,7 +146,7 @@ namespace test6EntityFrame.Controllers
 
             var user = new ApplicationUser() {Id = Guid.NewGuid().ToString("N"), UserName = model.userName, Email = model.email  , PhoneNumber = model.phoneNumber  };
 
-            IdentityResult result =  UserManager.Create(user,model.password);
+            IdentityResult result =  UserManager.Create(user, model.password);
 
             if (!result.Succeeded)
             {
@@ -161,7 +161,7 @@ namespace test6EntityFrame.Controllers
 
             };
 
-            return Ok(groupJoin);
+            return Ok(user);
         }
 
         private IHttpActionResult GetErrorResult(IdentityResult result)
