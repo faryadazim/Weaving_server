@@ -12,16 +12,6 @@
           <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="256" Nullable="false" />
         </EntityType>
-        <EntityType Name="AspNetUserLogins">
-          <Key>
-            <PropertyRef Name="LoginProvider" />
-            <PropertyRef Name="ProviderKey" />
-            <PropertyRef Name="UserId" />
-          </Key>
-          <Property Name="LoginProvider" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="ProviderKey" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
-        </EntityType>
         <EntityType Name="AspNetUserRoles">
           <Key>
             <PropertyRef Name="UserId" />
@@ -55,6 +45,18 @@
           <Property Name="module_name" Type="varchar(max)" />
           <Property Name="module_icon" Type="varchar(max)" />
         </EntityType>
+        <EntityType Name="PagePermission">
+          <Key>
+            <PropertyRef Name="PermissionId" />
+          </Key>
+          <Property Name="PermissionId" Type="int" Nullable="false" />
+          <Property Name="RoleId" Type="varchar(max)" />
+          <Property Name="PageId" Type="varchar(max)" />
+          <Property Name="EditPermission" Type="varchar(max)" />
+          <Property Name="viewPermission" Type="varchar(max)" />
+          <Property Name="DelPermission" Type="varchar(max)" />
+          <Property Name="AddPermission" Type="varchar(max)" />
+        </EntityType>
         <EntityType Name="Pages">
           <Key>
             <PropertyRef Name="page_id" />
@@ -66,10 +68,10 @@
         </EntityType>
         <EntityContainer Name="db_weavingModelStoreContainer">
           <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Modules" EntityType="Self.Modules" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PagePermission" EntityType="Self.PagePermission" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Pages" EntityType="Self.Pages" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -78,11 +80,11 @@
       <Schema Namespace="db_weavingModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="db_weavingEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AspNetRoles" EntityType="db_weavingModel.AspNetRoles" />
-          <EntitySet Name="AspNetUserLogins" EntityType="db_weavingModel.AspNetUserLogins" />
           <EntitySet Name="AspNetUserRoles" EntityType="db_weavingModel.AspNetUserRoles" />
           <EntitySet Name="AspNetUsers" EntityType="db_weavingModel.AspNetUsers" />
           <EntitySet Name="Modules" EntityType="db_weavingModel.Modules" />
           <EntitySet Name="Pages" EntityType="db_weavingModel.Pages" />
+          <EntitySet Name="PagePermission" EntityType="db_weavingModel.PagePermission" />
         </EntityContainer>
         <EntityType Name="AspNetRoles">
           <Key>
@@ -90,16 +92,6 @@
           </Key>
           <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="AspNetUserLogins">
-          <Key>
-            <PropertyRef Name="LoginProvider" />
-            <PropertyRef Name="ProviderKey" />
-            <PropertyRef Name="UserId" />
-          </Key>
-          <Property Name="LoginProvider" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="ProviderKey" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="AspNetUserRoles">
           <Key>
@@ -143,6 +135,18 @@
           <Property Name="page_link" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="module_id" Type="Int32" />
         </EntityType>
+        <EntityType Name="PagePermission">
+          <Key>
+            <PropertyRef Name="PermissionId" />
+          </Key>
+          <Property Name="PermissionId" Type="Int32" Nullable="false" />
+          <Property Name="RoleId" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="PageId" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="EditPermission" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="viewPermission" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="DelPermission" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="AddPermission" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -154,15 +158,6 @@
               <MappingFragment StoreEntitySet="AspNetRoles">
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AspNetUserLogins">
-            <EntityTypeMapping TypeName="db_weavingModel.AspNetUserLogins">
-              <MappingFragment StoreEntitySet="AspNetUserLogins">
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="ProviderKey" ColumnName="ProviderKey" />
-                <ScalarProperty Name="LoginProvider" ColumnName="LoginProvider" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -208,6 +203,19 @@
                 <ScalarProperty Name="page_link" ColumnName="page_link" />
                 <ScalarProperty Name="page_name" ColumnName="page_name" />
                 <ScalarProperty Name="page_id" ColumnName="page_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PagePermission">
+            <EntityTypeMapping TypeName="db_weavingModel.PagePermission">
+              <MappingFragment StoreEntitySet="PagePermission">
+                <ScalarProperty Name="AddPermission" ColumnName="AddPermission" />
+                <ScalarProperty Name="DelPermission" ColumnName="DelPermission" />
+                <ScalarProperty Name="viewPermission" ColumnName="viewPermission" />
+                <ScalarProperty Name="EditPermission" ColumnName="EditPermission" />
+                <ScalarProperty Name="PageId" ColumnName="PageId" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="PermissionId" ColumnName="PermissionId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

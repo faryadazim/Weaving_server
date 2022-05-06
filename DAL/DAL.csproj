@@ -53,9 +53,6 @@
     <Compile Include="AspNetRoles.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="AspNetUserLogins.cs">
-      <DependentUpon>DataModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="AspNetUserRoles.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
@@ -78,6 +75,9 @@
       <DependentUpon>DataModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Modules.cs">
+      <DependentUpon>DataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PagePermission.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Pages.cs">

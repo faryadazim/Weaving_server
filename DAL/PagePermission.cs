@@ -12,10 +12,14 @@ namespace DAL
     using System;
     using System.Collections.Generic;
     
-    public partial class AspNetUserLogins
+    public partial class PagePermission
     {
-        public string LoginProvider { get; set; }
-        public string ProviderKey { get; set; }
-        public string UserId { get; set; }
+        public int PermissionId { get; set; }
+        public string RoleId { get; set; }
+        public string PageId { get; set; }
+        public string EditPermission { get; set; }
+        public string viewPermission { get; set; }
+        public string DelPermission { get; set; }
+        public string AddPermission { get; set; }
     }
 }

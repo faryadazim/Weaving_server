@@ -6,20 +6,55 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using DAL;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using test6EntityFrame.Models;
 
 namespace test6EntityFrame.Controllers
 {
     public class UsersController : ApiController
     {
+        private ApplicationUserManager _userManager;
         private db_weavingEntities db = new db_weavingEntities();
+        public ApplicationUserManager UserManager
+        {
+            get
+            {
+                return _userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
+        }
 
         // GET: api/Users
-        public IQueryable<AspNetUsers> GetAspNetUsers()
+        [Route("api/Users")]
+        public IHttpActionResult GetAspNetUsers()
         {
-            return db.AspNetUsers;
+        var data= db.AspNetUsers;
+             
+
+            var user = (from uRole in db.AspNetUserRoles
+                        join userDB in db.AspNetUsers on uRole.UserId equals userDB.Id
+                        from Role in db.AspNetRoles where Role.Id  ==  uRole.RoleId 
+                        select new
+                        {
+                            id = userDB.Id, 
+                            email = userDB.Email,
+                            userName = userDB.UserName,
+                            phoneNumber = userDB.PhoneNumber,
+                            passwordHash = userDB.PasswordHash,
+                            role = uRole.RoleId,
+                            roleName = Role.Name
+
+
+                        });
+            return Ok(user);
         }
 
         // GET: api/Users/5
@@ -71,33 +106,59 @@ namespace test6EntityFrame.Controllers
         }
 
         // POST: api/Users
-        [ResponseType(typeof(AspNetUsers))]
-        public IHttpActionResult PostAspNetUsers(AspNetUsers aspNetUsers)
+        //[ResponseType(typeof(AspNetUsers))]
+        //public IHttpActionResult PostAspNetUsers(AspNetUsers aspNetUsers)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
+
+        //    db.AspNetUsers.Add(aspNetUsers);
+
+        //    try
+        //    {
+        //        db.SaveChanges();
+        //    }
+        //    catch (DbUpdateException)
+        //    {
+        //        if (AspNetUsersExists(aspNetUsers.Id))
+        //        {
+        //            return Conflict();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
+
+        //    return CreatedAtRoute("DefaultApi", new { id = aspNetUsers.Id }, aspNetUsers);
+        //}
+
+             
+        [Route("api/Users")]
+        public async Task<IHttpActionResult> Register(RegisterBindingModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.AspNetUsers.Add(aspNetUsers);
+            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
 
-            try
+            IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+
+            if (!result.Succeeded)
             {
-                db.SaveChanges();
-            }
-            catch (DbUpdateException)
-            {
-                if (AspNetUsersExists(aspNetUsers.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
+                return GetErrorResult(result);
             }
 
-            return CreatedAtRoute("DefaultApi", new { id = aspNetUsers.Id }, aspNetUsers);
+            return Ok();
+        }
+
+        private IHttpActionResult GetErrorResult(IdentityResult result)
+        {
+            throw new NotImplementedException();
         }
 
         // DELETE: api/Users/5
