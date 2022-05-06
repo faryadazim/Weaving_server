@@ -135,7 +135,7 @@ namespace test6EntityFrame.Controllers
 
              
         [Route("api/Users")]
-        public IHttpActionResult async(string email, string password, string confirmPassword)
+        public IHttpActionResult async(string email, string password, string userName , string phoneNumber)
        // public async Task<IHttpActionResult> Register(int param_ID  )
         {
             if (!ModelState.IsValid)
@@ -143,7 +143,7 @@ namespace test6EntityFrame.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() {Id = Guid.NewGuid().ToString("N"), UserName = email, Email = email };
+            var user = new ApplicationUser() {Id = Guid.NewGuid().ToString("N"), UserName = userName, Email = email  , PhoneNumber = phoneNumber  };
 
             IdentityResult result =  UserManager.Create(user, password);
 
@@ -151,8 +151,16 @@ namespace test6EntityFrame.Controllers
             {
                 return GetErrorResult(result);
             }
+            var groupJoin = new
+            {
+                userName = user.UserName,
+                userId = user.Id,
+                email = user.Email,
+                phoneNumber = user.PhoneNumber
 
-            return Ok(result);
+            };
+
+            return Ok(user);
         }
 
         private IHttpActionResult GetErrorResult(IdentityResult result)
