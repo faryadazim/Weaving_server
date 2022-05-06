@@ -135,16 +135,17 @@ namespace test6EntityFrame.Controllers
 
              
         [Route("api/Users")]
-        public async Task<IHttpActionResult> Register(RegisterBindingModel model)
+        public IHttpActionResult async(string email, string password, string confirmPassword)
+       // public async Task<IHttpActionResult> Register(int param_ID  )
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
+            var user = new ApplicationUser() {Id = Guid.NewGuid().ToString("N"), UserName = email, Email = email };
 
-            IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+            IdentityResult result =  UserManager.Create(user, password);
 
             if (!result.Succeeded)
             {
