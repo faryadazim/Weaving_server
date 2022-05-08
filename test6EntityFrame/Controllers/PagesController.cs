@@ -17,9 +17,23 @@ namespace test6EntityFrame.Controllers
         private db_weavingEntities db = new db_weavingEntities();
 
         // GET: api/Pages
-        public IQueryable<Pages> GetPages()
+        public IHttpActionResult GetPage()
         {
-            return db.Pages;
+            
+             
+            var joinGroup = (
+                from pagesTable in db.Pages join modulesTable in db.Modules on pagesTable.module_id equals modulesTable.module_id where
+                pagesTable.module_id == modulesTable.module_id select new
+                {
+                        id = pagesTable.page_id,
+                        name = pagesTable.page_name,
+                        pageUrl = pagesTable.page_link,
+                        moduleId = modulesTable.module_id , 
+                        module = modulesTable.module_name
+                });
+
+            return Ok(joinGroup);
+
         }
 
         // GET: api/Pages/5

@@ -6,11 +6,11 @@
     <edmx:Diagrams>
       <Diagram DiagramId="026a9aac71724c52b88be737efb2bc2c" Name="Diagram1">
         <EntityTypeShape EntityType="db_weavingModel.AspNetRoles" Width="1.5" PointX="2.875" PointY="0.5" />
-        <EntityTypeShape EntityType="db_weavingModel.AspNetUserRoles" Width="1.5" PointX="0.875" PointY="0.5" />
+        <EntityTypeShape EntityType="db_weavingModel.AspNetUserRoles" Width="1.5" PointX="0.75" PointY="0.5" />
         <EntityTypeShape EntityType="db_weavingModel.AspNetUsers" Width="1.5" PointX="0.5" PointY="2.375" />
         <EntityTypeShape EntityType="db_weavingModel.Modules" Width="1.5" PointX="4.75" PointY="0.5" />
-        <EntityTypeShape EntityType="db_weavingModel.Pages" Width="1.5" PointX="7.5" PointY="0.75" />
-        <EntityTypeShape EntityType="db_weavingModel.PagePermission" Width="1.5" PointX="3.5" PointY="2.375" />
+        <EntityTypeShape EntityType="db_weavingModel.Pages" Width="1.5" PointX="7.25" PointY="1.875" />
+        <EntityTypeShape EntityType="db_weavingModel.PagePermission" Width="1.5" PointX="3.5" PointY="2.5" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

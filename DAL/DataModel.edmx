@@ -141,7 +141,7 @@
           </Key>
           <Property Name="PermissionId" Type="Int32" Nullable="false" />
           <Property Name="RoleId" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="PageId" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="PageId" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
           <Property Name="EditPermission" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="viewPermission" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="DelPermission" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />

@@ -47,9 +47,7 @@ namespace test6EntityFrame.Controllers
                         {
                             id = userDB.Id, 
                             email = userDB.Email,
-                            userName = userDB.UserName,
-                            phoneNumber = userDB.PhoneNumber,
-                            passwordHash = userDB.PasswordHash,
+                            userName = userDB.UserName, 
                             role = uRole.RoleId,
                             roleName = Role.Name
                         });
@@ -69,39 +67,52 @@ namespace test6EntityFrame.Controllers
             return Ok(aspNetUsers);
         }
 
-        // PUT: api/Users/5
-        [ResponseType(typeof(void))]
-        public IHttpActionResult PutAspNetUsers(string id, AspNetUsers aspNetUsers)
+        // PUT: api/Users/5 
+        [Route("api/Users")]
+        public IHttpActionResult PutUser(string InputId, string InputuserName , string Inputemail )
         {
-            if (!ModelState.IsValid)
+            //var entity = entities.device_config.FirstOrDefault(e => e.device_config_id == 1);
+            var entity = db.AspNetUsers.FirstOrDefault(e => e.Id == InputId);
+            if (entity == null)
             {
-                return BadRequest(ModelState);
+                return NotFound();
             }
-
-            if (id != aspNetUsers.Id)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(aspNetUsers).State = EntityState.Modified;
-
-            try
-            {
+            else
+            { 
+                entity.Email = Inputemail;
+                entity.UserName = InputuserName; 
                 db.SaveChanges();
+            //    //entities.SaveChanges(); 
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AspNetUsersExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest(ModelState);
+            //}
 
-            return StatusCode(HttpStatusCode.NoContent);
+            //if (id != aspNetUsers.Id)
+            //{
+            //    return BadRequest();
+            //}
+
+            //db.Entry(aspNetUsers).State = EntityState.Modified;
+
+            //try
+            //{
+            //    db.SaveChanges();
+            //}
+            //catch (DbUpdateConcurrencyException)
+            //{
+            //    if (!AspNetUsersExists(id))
+            //    {
+            //        return NotFound();
+            //    }
+            //    else
+            //    {
+            //        throw;
+            //    }
+            //}
+          
+            return Ok();
         }
 
         // POST: api/Users
@@ -144,7 +155,7 @@ namespace test6EntityFrame.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() {Id = Guid.NewGuid().ToString("N"), UserName = model.userName, Email = model.email  , PhoneNumber = model.phoneNumber  };
+            var user = new ApplicationUser() {Id = Guid.NewGuid().ToString("N"), UserName = model.userName, Email = model.email  };
 
             IdentityResult result =  UserManager.Create(user, model.password);
 
@@ -156,8 +167,7 @@ namespace test6EntityFrame.Controllers
             {
                 userName = user.UserName,
                 userId = user.Id,
-                email = user.Email,
-                phoneNumber = user.PhoneNumber
+                email = user.Email
 
             };
 
@@ -183,6 +193,24 @@ namespace test6EntityFrame.Controllers
             db.SaveChanges();
 
             return Ok(aspNetUsers);
+        }
+        [Route("api/Users/changePassword")]  
+        public async Task<IHttpActionResult> ChangePassword(string Userid,string UserOldPassword ,string UserNewPassword)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            IdentityResult result = await UserManager.ChangePasswordAsync(Userid,UserOldPassword,
+               UserNewPassword);
+
+            if (!result.Succeeded)
+            {
+                return GetErrorResult(result);
+            }
+
+            return Ok();
         }
 
         protected override void Dispose(bool disposing)
