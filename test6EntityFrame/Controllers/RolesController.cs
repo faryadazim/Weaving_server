@@ -70,16 +70,22 @@ namespace test6EntityFrame.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Roles
-        [ResponseType(typeof(AspNetRoles))]
-        public IHttpActionResult PostAspNetRoles(AspNetRoles aspNetRoles)
+        // POST: api/Roles 
+        public IHttpActionResult PostAspNetRoles(string InputPageName)
         {
+            var CustomId = Guid.NewGuid().ToString("N");
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.AspNetRoles.Add(aspNetRoles);
+            var newRole = new AspNetRoles()
+            {
+                Id = CustomId,
+                Name = InputPageName
+
+            };
+            db.AspNetRoles.Add(newRole);
 
             try
             {
@@ -87,17 +93,18 @@ namespace test6EntityFrame.Controllers
             }
             catch (DbUpdateException)
             {
-                if (AspNetRolesExists(aspNetRoles.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
+                //if (AspNetRolesExists(aspNetRoles.Id))
+                //{
+                //    return Conflict();
+                //}
+                //else
+                //{
+                //    throw;
+                //}
+                return NotFound();
             }
 
-            return CreatedAtRoute("DefaultApi", new { id = aspNetRoles.Id }, aspNetRoles);
+            return Ok();
         }
 
         // DELETE: api/Roles/5
