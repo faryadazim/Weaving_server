@@ -37,20 +37,23 @@ namespace test6EntityFrame.Controllers
 
         // PUT: api/Roles/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutAspNetRoles(string id, AspNetRoles aspNetRoles)
+        public IHttpActionResult PutAspNetRoles(string id, string roleName)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != aspNetRoles.Id)
+            var entity = db.AspNetRoles.FirstOrDefault(e => e.Id == id);
+            if(entity == null)
             {
-                return BadRequest();
+                return NotFound();
             }
-
-            db.Entry(aspNetRoles).State = EntityState.Modified;
-
+            else
+            {
+                entity.Name = roleName;
+            }
+            
             try
             {
                 db.SaveChanges();
