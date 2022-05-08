@@ -17,28 +17,28 @@ namespace test6EntityFrame.Controllers
         private db_weavingEntities db = new db_weavingEntities();
 
         // GET: api/Pages
-        public IHttpActionResult GetPage()
+        public IHttpActionResult GetPages()
         {
-            
-             
             var joinGroup = (
-                from pagesTable in db.Pages join modulesTable in db.Modules on pagesTable.module_id equals modulesTable.module_id where
-                pagesTable.module_id == modulesTable.module_id select new
+                from pagesTable in db.Pages
+                join modulesTable in db.Modules on pagesTable.module_id equals modulesTable.module_id
+                where
+                    pagesTable.module_id == modulesTable.module_id
+                select new
                 {
-                        id = pagesTable.page_id,
-                        name = pagesTable.page_name,
-                        pageUrl = pagesTable.page_link,
-                        moduleId = modulesTable.module_id , 
-                        module = modulesTable.module_name
+                    id = pagesTable.page_id,
+                    name = pagesTable.page_name,
+                    pageUrl = pagesTable.page_link,
+                    moduleId = modulesTable.module_id,
+                    module = modulesTable.module_name
                 });
 
             return Ok(joinGroup);
-
         }
 
         // GET: api/Pages/5
         [ResponseType(typeof(Pages))]
-        public IHttpActionResult GetPages(int id)
+        public IHttpActionResult GetPages(string id)
         {
             Pages pages = db.Pages.Find(id);
             if (pages == null)
@@ -51,17 +51,14 @@ namespace test6EntityFrame.Controllers
 
         // PUT: api/Pages/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutPages(int id, Pages pages)
+        public IHttpActionResult PutPages( Pages pages)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != pages.page_id)
-            {
-                return BadRequest();
-            }
+           
 
             db.Entry(pages).State = EntityState.Modified;
 
@@ -71,7 +68,7 @@ namespace test6EntityFrame.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PagesExists(id))
+                if (!PagesExists(pages.page_id))
                 {
                     return NotFound();
                 }
@@ -88,20 +85,24 @@ namespace test6EntityFrame.Controllers
         [ResponseType(typeof(Pages))]
         public IHttpActionResult PostPages(Pages pages)
         {
-            if (!ModelState.IsValid)
+
+            var customId = Guid.NewGuid().ToString("N");
+            var newPages = new Pages()
             {
-                return BadRequest(ModelState);
-            }
+                page_id = customId,
+                page_name =  pages.page_name,
+                page_link =pages.page_link ,
+            module_id = pages.module_id
+            };
 
-            db.Pages.Add(pages);
-
+            db.Pages.Add(newPages);
             try
             {
                 db.SaveChanges();
             }
             catch (DbUpdateException)
             {
-                if (PagesExists(pages.page_id))
+                if (PagesExists(customId))
                 {
                     return Conflict();
                 }
@@ -111,12 +112,12 @@ namespace test6EntityFrame.Controllers
                 }
             }
 
-            return CreatedAtRoute("DefaultApi", new { id = pages.page_id }, pages);
+            return CreatedAtRoute("DefaultApi", new { id = customId }, pages);
         }
 
         // DELETE: api/Pages/5
         [ResponseType(typeof(Pages))]
-        public IHttpActionResult DeletePages(int id)
+        public IHttpActionResult DeletePages(string id)
         {
             Pages pages = db.Pages.Find(id);
             if (pages == null)
@@ -139,7 +140,7 @@ namespace test6EntityFrame.Controllers
             base.Dispose(disposing);
         }
 
-        private bool PagesExists(int id)
+        private bool PagesExists(string id)
         {
             return db.Pages.Count(e => e.page_id == id) > 0;
         }

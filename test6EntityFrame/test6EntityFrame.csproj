@@ -223,8 +223,9 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ModulesController.cs" />
-    <Compile Include="Controllers\PagePermissionsController.cs" />
     <Compile Include="Controllers\PagesController.cs" />
+    <Compile Include="Controllers\PagesController33.cs" />
+    <Compile Include="Controllers\PermissionsController.cs" />
     <Compile Include="Controllers\RolesController.cs" />
     <Compile Include="Controllers\UserRolesController.cs" />
     <Compile Include="Controllers\UsersController.cs" />

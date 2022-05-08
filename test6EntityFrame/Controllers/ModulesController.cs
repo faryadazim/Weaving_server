@@ -24,7 +24,7 @@ namespace test6EntityFrame.Controllers
 
         // GET: api/Modules/5
         [ResponseType(typeof(Modules))]
-        public IHttpActionResult GetModules(int id)
+        public IHttpActionResult GetModules(string id)
         {
             Modules modules = db.Modules.Find(id);
             if (modules == null)
@@ -37,17 +37,14 @@ namespace test6EntityFrame.Controllers
 
         // PUT: api/Modules/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutModules(int id, Modules modules)
+        public IHttpActionResult PutModules(Modules modules)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return BadRequest(ModelState);
-            //}
-
-            if (id != modules.module_id)
+            if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
+
+         
 
             db.Entry(modules).State = EntityState.Modified;
 
@@ -57,7 +54,7 @@ namespace test6EntityFrame.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ModulesExists(id))
+                if (!ModulesExists(modules.module_id))
                 {
                     return NotFound();
                 }
@@ -72,14 +69,25 @@ namespace test6EntityFrame.Controllers
 
         // POST: api/Modules
         [ResponseType(typeof(Modules))]
-        public IHttpActionResult PostModules(Modules modules)
+        public IHttpActionResult PostModules( Modules modules)
         {
+            //            public string module_id { get; set; }
+            //public string module_name { get; set; }
+            //public string module_icon { get; set; }
+            var customId = Guid.NewGuid().ToString("N");
+            var newModule = new Modules()
+            {
+                module_id = customId,
+                module_name = modules.module_name,
+                module_icon = modules.module_icon
+
+            };
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Modules.Add(modules);
+            db.Modules.Add(newModule);
 
             try
             {
@@ -97,12 +105,12 @@ namespace test6EntityFrame.Controllers
                 }
             }
 
-            return CreatedAtRoute("DefaultApi", new { id = modules.module_id }, modules);
+            return CreatedAtRoute("DefaultApi", new { id =customId }, newModule);
         }
 
         // DELETE: api/Modules/5
         [ResponseType(typeof(Modules))]
-        public IHttpActionResult DeleteModules(int id)
+        public IHttpActionResult DeleteModules(string id)
         {
             Modules modules = db.Modules.Find(id);
             if (modules == null)
@@ -125,7 +133,7 @@ namespace test6EntityFrame.Controllers
             base.Dispose(disposing);
         }
 
-        private bool ModulesExists(int id)
+        private bool ModulesExists(string id)
         {
             return db.Modules.Count(e => e.module_id == id) > 0;
         }

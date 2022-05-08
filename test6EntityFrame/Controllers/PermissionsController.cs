@@ -12,17 +12,17 @@ using DAL;
 
 namespace test6EntityFrame.Controllers
 {
-    public class PagePermissionsController : ApiController
+    public class PermissionsController : ApiController
     {
         private db_weavingEntities db = new db_weavingEntities();
 
-        // GET: api/PagePermissions
+        // GET: api/Permissions
         public IQueryable<PagePermission> GetPagePermission()
         {
             return db.PagePermission;
         }
 
-        // GET: api/PagePermissions/5
+        // GET: api/Permissions/5
         [ResponseType(typeof(PagePermission))]
         public IHttpActionResult GetPagePermission(int id)
         {
@@ -35,7 +35,7 @@ namespace test6EntityFrame.Controllers
             return Ok(pagePermission);
         }
 
-        // PUT: api/PagePermissions/5
+        // PUT: api/Permissions/5
         [ResponseType(typeof(void))]
         public IHttpActionResult PutPagePermission(int id, PagePermission pagePermission)
         {
@@ -70,7 +70,7 @@ namespace test6EntityFrame.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/PagePermissions
+        // POST: api/Permissions
         [ResponseType(typeof(PagePermission))]
         public IHttpActionResult PostPagePermission(PagePermission pagePermission)
         {
@@ -100,7 +100,7 @@ namespace test6EntityFrame.Controllers
             return CreatedAtRoute("DefaultApi", new { id = pagePermission.PermissionId }, pagePermission);
         }
 
-        // DELETE: api/PagePermissions/5
+        // DELETE: api/Permissions/5
         [ResponseType(typeof(PagePermission))]
         public IHttpActionResult DeletePagePermission(int id)
         {

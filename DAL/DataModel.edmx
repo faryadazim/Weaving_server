@@ -41,7 +41,7 @@
           <Key>
             <PropertyRef Name="module_id" />
           </Key>
-          <Property Name="module_id" Type="int" Nullable="false" />
+          <Property Name="module_id" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="module_name" Type="varchar(max)" />
           <Property Name="module_icon" Type="varchar(max)" />
         </EntityType>
@@ -61,10 +61,10 @@
           <Key>
             <PropertyRef Name="page_id" />
           </Key>
-          <Property Name="page_id" Type="int" Nullable="false" />
+          <Property Name="page_id" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="page_name" Type="varchar(max)" />
           <Property Name="page_link" Type="varchar(max)" />
-          <Property Name="module_id" Type="int" />
+          <Property Name="module_id" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityContainer Name="db_weavingModelStoreContainer">
           <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
@@ -82,9 +82,9 @@
           <EntitySet Name="AspNetRoles" EntityType="db_weavingModel.AspNetRoles" />
           <EntitySet Name="AspNetUserRoles" EntityType="db_weavingModel.AspNetUserRoles" />
           <EntitySet Name="AspNetUsers" EntityType="db_weavingModel.AspNetUsers" />
+          <EntitySet Name="PagePermission" EntityType="db_weavingModel.PagePermission" />
           <EntitySet Name="Modules" EntityType="db_weavingModel.Modules" />
           <EntitySet Name="Pages" EntityType="db_weavingModel.Pages" />
-          <EntitySet Name="PagePermission" EntityType="db_weavingModel.PagePermission" />
         </EntityContainer>
         <EntityType Name="AspNetRoles">
           <Key>
@@ -118,23 +118,6 @@
           <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
           <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="Modules">
-          <Key>
-            <PropertyRef Name="module_id" />
-          </Key>
-          <Property Name="module_id" Type="Int32" Nullable="false" />
-          <Property Name="module_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="module_icon" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="Pages">
-          <Key>
-            <PropertyRef Name="page_id" />
-          </Key>
-          <Property Name="page_id" Type="Int32" Nullable="false" />
-          <Property Name="page_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="page_link" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="module_id" Type="Int32" />
-        </EntityType>
         <EntityType Name="PagePermission">
           <Key>
             <PropertyRef Name="PermissionId" />
@@ -146,6 +129,23 @@
           <Property Name="viewPermission" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="DelPermission" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="AddPermission" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Modules">
+          <Key>
+            <PropertyRef Name="module_id" />
+          </Key>
+          <Property Name="module_id" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="module_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="module_icon" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Pages">
+          <Key>
+            <PropertyRef Name="page_id" />
+          </Key>
+          <Property Name="page_id" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="page_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="page_link" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="module_id" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -187,6 +187,19 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="PagePermission">
+            <EntityTypeMapping TypeName="db_weavingModel.PagePermission">
+              <MappingFragment StoreEntitySet="PagePermission">
+                <ScalarProperty Name="AddPermission" ColumnName="AddPermission" />
+                <ScalarProperty Name="DelPermission" ColumnName="DelPermission" />
+                <ScalarProperty Name="viewPermission" ColumnName="viewPermission" />
+                <ScalarProperty Name="EditPermission" ColumnName="EditPermission" />
+                <ScalarProperty Name="PageId" ColumnName="PageId" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="PermissionId" ColumnName="PermissionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Modules">
             <EntityTypeMapping TypeName="db_weavingModel.Modules">
               <MappingFragment StoreEntitySet="Modules">
@@ -203,19 +216,6 @@
                 <ScalarProperty Name="page_link" ColumnName="page_link" />
                 <ScalarProperty Name="page_name" ColumnName="page_name" />
                 <ScalarProperty Name="page_id" ColumnName="page_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PagePermission">
-            <EntityTypeMapping TypeName="db_weavingModel.PagePermission">
-              <MappingFragment StoreEntitySet="PagePermission">
-                <ScalarProperty Name="AddPermission" ColumnName="AddPermission" />
-                <ScalarProperty Name="DelPermission" ColumnName="DelPermission" />
-                <ScalarProperty Name="viewPermission" ColumnName="viewPermission" />
-                <ScalarProperty Name="EditPermission" ColumnName="EditPermission" />
-                <ScalarProperty Name="PageId" ColumnName="PageId" />
-                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
-                <ScalarProperty Name="PermissionId" ColumnName="PermissionId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
