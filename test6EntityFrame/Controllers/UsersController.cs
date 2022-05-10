@@ -6,6 +6,7 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -35,21 +36,25 @@ namespace test6EntityFrame.Controllers
 
         // GET: api/Users
         [Route("api/Users")]
+        [Authorize]
         public IHttpActionResult GetAspNetUsers()
         {
         var data= db.AspNetUsers;
-             
 
-            var user = (from uRole in db.AspNetUserRoles
-                        join userDB in db.AspNetUsers on uRole.UserId equals userDB.Id
-                        from Role in db.AspNetRoles where Role.Id  ==  uRole.RoleId 
+         
+
+
+            var user = (from urole in db.AspNetUserRoles
+                        join userdb in db.AspNetUsers on urole.UserId equals userdb.Id
+                        from role in db.AspNetRoles
+                        where role.Id == urole.RoleId
                         select new
                         {
-                            id = userDB.Id, 
-                            email = userDB.Email,
-                            userName = userDB.UserName, 
-                            role = uRole.RoleId,
-                            roleName = Role.Name
+                            id = userdb.Id,
+                            email = userdb.Email,
+                            userName = userdb.UserName,
+                            role = urole.RoleId,
+                            roleName = role.Name
                         });
             return Ok(user);
         }

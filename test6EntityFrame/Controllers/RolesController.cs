@@ -89,6 +89,33 @@ namespace test6EntityFrame.Controllers
 
             };
             db.AspNetRoles.Add(newRole);
+            // if we create any pages it permission will be assign to  all Role but what if
+            //we create a new Role --- after that  new pages permission will bew assigned but wha about old pages
+
+            //solution ---
+            //bring list opf all table ;
+            //add these table to that New Role
+            //var ListOfRole = (from dataTAble in db.AspNetRoles select dataTAble.Id);
+            var ListOfPages = from dataTable in db.Pages select dataTable.page_id;
+            foreach (string ch in ListOfPages)
+            {
+
+                var customIdFor = Guid.NewGuid().ToString("P");
+                var newPAgePermission = new PagePermission()
+                {
+                    PermissionId = customIdFor,
+
+                    RoleId = CustomId,
+                    PageId = ch,
+                    EditPermission = "false",
+                    viewPermission = "false",
+                    DelPermission = "false",
+                    AddPermission = "false"
+                };
+                db.PagePermission.Add(newPAgePermission);
+
+            }
+           
 
             try
             {

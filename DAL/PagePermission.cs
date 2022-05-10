@@ -14,7 +14,7 @@ namespace DAL
     
     public partial class PagePermission
     {
-        public int PermissionId { get; set; }
+        public string PermissionId { get; set; }
         public string RoleId { get; set; }
         public string PageId { get; set; }
         public string EditPermission { get; set; }

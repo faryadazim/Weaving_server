@@ -43,8 +43,11 @@ namespace test6EntityFrame.Providers
                OAuthDefaults.AuthenticationType);
             ClaimsIdentity cookiesIdentity = await user.GenerateUserIdentityAsync(userManager,
                 CookieAuthenticationDefaults.AuthenticationType);
-
+            //oAuthIdentity.AddClaim(new Claim("login_id", user.Id));
+            //oAuthIdentity.AddClaim(new Claim("email", user.Email));
+            //oAuthIdentity.AddClaim(new Claim(ClaimTypes.Email, user.Email));
             AuthenticationProperties properties = CreateProperties(user.UserName);
+             properties = CreateProperties(user.Id);
             AuthenticationTicket ticket = new AuthenticationTicket(oAuthIdentity, properties);
             context.Validated(ticket);
             context.Request.Context.Authentication.SignIn(cookiesIdentity);

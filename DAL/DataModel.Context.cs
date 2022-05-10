@@ -28,8 +28,8 @@ namespace DAL
         public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }
         public virtual DbSet<AspNetUserRoles> AspNetUserRoles { get; set; }
         public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
-        public virtual DbSet<PagePermission> PagePermission { get; set; }
         public virtual DbSet<Modules> Modules { get; set; }
         public virtual DbSet<Pages> Pages { get; set; }
+        public virtual DbSet<PagePermission> PagePermission { get; set; }
     }
 }

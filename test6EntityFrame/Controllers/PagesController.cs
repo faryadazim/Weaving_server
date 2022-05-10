@@ -96,6 +96,32 @@ namespace test6EntityFrame.Controllers
             };
 
             db.Pages.Add(newPages);
+            var ListOfRole = (from dataTAble in db.AspNetRoles select dataTAble.Id);
+
+            
+
+            foreach (string ch in ListOfRole)
+            {
+
+                var customIdFor = Guid.NewGuid().ToString("P");
+                var newPAgePermission = new PagePermission()
+                {
+                       PermissionId  = customIdFor,
+
+        RoleId = ch,
+                    PageId = customId,
+                    EditPermission = "false",
+                    viewPermission = "false",
+                    DelPermission = "false",
+                    AddPermission = "false"
+                };
+                db.PagePermission.Add(newPAgePermission);
+               
+            }
+
+
+  
+
             try
             {
                 db.SaveChanges();
@@ -112,7 +138,7 @@ namespace test6EntityFrame.Controllers
                 }
             }
 
-            return CreatedAtRoute("DefaultApi", new { id = customId }, pages);
+            return Ok(newPages);
         }
 
         // DELETE: api/Pages/5

@@ -26,13 +26,14 @@ namespace test6EntityFrame.Controllers
         [ResponseType(typeof(AspNetUserRoles))]
         public IHttpActionResult GetAspNetUserRoles(string id)
         {
-            AspNetUserRoles aspNetUserRoles = db.AspNetUserRoles.Find(id);
-            if (aspNetUserRoles == null)
+            var entity = from table in db.AspNetUserRoles where table.UserId == id select table;
+
+            if (id == null)
             {
                 return NotFound();
             }
 
-            return Ok(aspNetUserRoles);
+            return Ok(entity);
         }
 
         // PUT: api/UserRoles/5
