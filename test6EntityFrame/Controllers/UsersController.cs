@@ -36,7 +36,7 @@ namespace test6EntityFrame.Controllers
 
         // GET: api/Users
         [Route("api/Users")]
-        [Authorize]
+   
         public IHttpActionResult GetAspNetUsers()
         {
         var data= db.AspNetUsers;
