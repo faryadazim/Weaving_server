@@ -57,9 +57,10 @@ namespace test6EntityFrame.Controllers
                 userName = Name,
                 navigationResult = from moduleRow in db.Modules
                                    select new
-                                   {
+                                   {            
                                        moduleRow.module_name,
                                        moduleRow.module_id,
+                                       moduleRow.module_icon,
                                        pages = (from PageTable in db.Pages
                                                 join PrTable in db.PagePermission on PageTable.page_id equals PrTable.PageId
                                                 where PrTable.RoleId == RoleID.FirstOrDefault() && PageTable.module_id == moduleRow.module_id
