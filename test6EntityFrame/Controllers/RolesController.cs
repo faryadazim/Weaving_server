@@ -148,8 +148,30 @@ namespace test6EntityFrame.Controllers
             }
 
             db.AspNetRoles.Remove(aspNetRoles);
-            db.SaveChanges();
 
+            var permissionIds = from prTable in db.PagePermission where prTable.RoleId == id select prTable.PermissionId;
+
+
+
+
+ 
+
+            foreach (string ch in permissionIds)
+            {
+                 
+                PagePermission prPermission = db.PagePermission.Find(ch);
+                if (prPermission == null)
+                {
+                    return NotFound();
+                }
+
+                db.PagePermission.Remove(prPermission);
+
+
+                
+
+            }
+ db.SaveChanges();
             return Ok(aspNetRoles);
         }
 

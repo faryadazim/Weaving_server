@@ -22,12 +22,12 @@ namespace test6EntityFrame.Controllers
                  .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
             var Name = (identity.Claims
               .FirstOrDefault(c => c.Type == ClaimTypes.Name).Value);
-            //var Email = (identity.Claims
-            //     .FirstOrDefault(c => c.Type == ClaimTypes.Email).Value);
             var RoleName = (identity.Claims
                  .FirstOrDefault(c => c.Type == ClaimTypes.Role).Value);
+            //var Email = (identity.Claims
+            //     .FirstOrDefault(c => c.Type == ClaimTypes.Email).Value);
             var RoleID = from roleTable in db.AspNetUserRoles
-                         where roleTable.UserId == LogIn select roleTable.RoleId;
+                         where roleTable.UserId == LogIn  select roleTable.RoleId;
 
             var navigationResult = from moduleRow in db.Modules
                                    select new
@@ -41,8 +41,14 @@ namespace test6EntityFrame.Controllers
                                                 {
                                                     pageName = PageTable.page_name,
                                                     pageID = PageTable.page_id,
-                                                    //moduleName = moduleRow.module_name,
-                                                    //moduleID = moduleRow.module_id,
+                                                    pageURL = PageTable.page_link,
+                                                    PageTable.page_id,
+                                                    //---- Permission Against Role 
+                                                    PrTable.AddPermission,
+                                                    PrTable.DelPermission,
+                                                    PrTable.EditPermission,
+                                                    PrTable.viewPermission
+
 
                                                 })
                                    };
@@ -57,7 +63,7 @@ namespace test6EntityFrame.Controllers
                 userName = Name,
                 navigationResult = from moduleRow in db.Modules
                                    select new
-                                   {            
+                                   {
                                        moduleRow.module_name,
                                        moduleRow.module_id,
                                        moduleRow.module_icon,
@@ -85,6 +91,6 @@ namespace test6EntityFrame.Controllers
             return "value";
         }
 
-        
+
     }
 }

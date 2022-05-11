@@ -16,12 +16,6 @@ namespace test6EntityFrame.Controllers
     {
         private db_weavingEntities db = new db_weavingEntities();
 
-        // GET: api/PagePermissions
-        //public IQueryable<PagePermission> GetPagePermission()
-        //{
-        //    return db.PagePermission;
-        //}
-
         // GET: api/PagePermissions/5
         [ResponseType(typeof(PagePermission))]
         public IHttpActionResult GetPagePermission(string roleId)
@@ -29,7 +23,7 @@ namespace test6EntityFrame.Controllers
 
 
 
-            var QueryCmd2 = from moduleRow in db.Modules
+            var pagePermission = from moduleRow in db.Modules
                             select new
                             {
                                 moduleRow.module_name,
@@ -41,33 +35,19 @@ namespace test6EntityFrame.Controllers
                                          {
                                              pageName = PageTable.page_name,
                                              pageID = PageTable.page_id,
-                                             moduleName = moduleRow.module_name,
-                                             moduleID = moduleRow.module_id,
+                                             //moduleName = moduleRow.module_name,
+                                             //moduleID = moduleRow.module_id, 
+                                             pageURL = PageTable.page_link,
+                                             PageTable.page_id,
+                                             //---- Permission Against Role 
+                                             PrTable.AddPermission,
+                                             PrTable.DelPermission,
+                                             PrTable.EditPermission,
+                                             PrTable.viewPermission
 
                                          })
-                            };
-
-
-
-            //join moduleTable in db.Modules on pageTable.module_id equals moduleTable.module_id
-
-            //&& pageTable.module_id == moduleTable.module_id
-            //select new
-            //{
-            //    permissionId = row.PermissionId,
-            //    pageID = row.PageId,
-            //    roleId = row.RoleId,
-            //    viewPermissions = row.viewPermission,
-            //    addPermission = row.AddPermission,
-            //    deletePermission = row.DelPermission,
-            //    editPermission = row.EditPermission,
-            //    //pageName = pageTable.page_name,
-            //    //pageLink = pageTable.page_link,
-            //    //moduleId = pageTable.module_id
-
-
-            //};
-            return Ok(QueryCmd2);
+                            }; 
+            return Ok(pagePermission);
 
         }
 
@@ -107,35 +87,6 @@ namespace test6EntityFrame.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        //// POST: api/PagePermissions
-        //[ResponseType(typeof(PagePermission))]
-        //public IHttpActionResult PostPagePermission(PagePermission pagePermission)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    db.PagePermission.Add(pagePermission);
-
-        //    try
-        //    {
-        //        db.SaveChanges();
-        //    }
-        //    catch (DbUpdateException)
-        //    {
-        //        if (PagePermissionExists(pagePermission.PermissionId))
-        //        {
-        //            return Conflict();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return CreatedAtRoute("DefaultApi", new { id = pagePermission.PermissionId }, pagePermission);
-        //}
 
 
         protected override void Dispose(bool disposing)
