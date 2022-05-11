@@ -4,7 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace WebApplication5.Models
+//namespace WebApplication5.Models
+namespace test6EntityFrame.Models
 {
     public class UserDataModel
     {       

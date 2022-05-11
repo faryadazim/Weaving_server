@@ -29,29 +29,29 @@ namespace test6EntityFrame.Controllers
             var RoleID = from roleTable in db.AspNetUserRoles
                          where roleTable.UserId == LogIn  select roleTable.RoleId;
 
-            var navigationResult = from moduleRow in db.Modules
-                                   select new
-                                   {
-                                       moduleRow.module_name,
-                                       moduleRow.module_id,
-                                       pages = (from PageTable in db.Pages
-                                                join PrTable in db.PagePermission on PageTable.page_id equals PrTable.PageId
-                                                where PrTable.RoleId == RoleID.FirstOrDefault() && PageTable.module_id == moduleRow.module_id
-                                                select new
-                                                {
-                                                    pageName = PageTable.page_name,
-                                                    pageID = PageTable.page_id,
-                                                    pageURL = PageTable.page_link,
-                                                    PageTable.page_id,
-                                                    //---- Permission Against Role 
-                                                    PrTable.AddPermission,
-                                                    PrTable.DelPermission,
-                                                    PrTable.EditPermission,
-                                                    PrTable.viewPermission
+            //var navigationResult = from moduleRow in db.Modules
+            //                       select new
+            //                       {
+            //                           moduleRow.module_name,
+            //                           moduleRow.module_id,
+            //                           pages = (from PageTable in db.Pages
+            //                                    join PrTable in db.PagePermission on PageTable.page_id equals PrTable.PageId
+            //                                    where PrTable.RoleId == RoleID.FirstOrDefault() && PageTable.module_id == moduleRow.module_id
+            //                                    select new
+            //                                    {
+            //                                        pageName = PageTable.page_name,
+            //                                        pageID = PageTable.page_id,
+            //                                        pageURL = PageTable.page_link,
+            //                                        PageTable.page_id,
+            //                                        //---- Permission Against Role 
+            //                                        PrTable.AddPermission,
+            //                                        PrTable.DelPermission,
+            //                                        PrTable.EditPermission,
+            //                                        PrTable.viewPermission
 
 
-                                                })
-                                   };
+            //                                    })
+            //                       };
 
 
 
@@ -74,8 +74,13 @@ namespace test6EntityFrame.Controllers
                                                 {
                                                     pageName = PageTable.page_name,
                                                     pageID = PageTable.page_id,
-                                                    //moduleName = moduleRow.module_name,
-                                                    //moduleID = moduleRow.module_id,
+                                                    pageURL = PageTable.page_link,
+                                                    PageTable.page_id,
+                                                    //---- Permission Against Role 
+                                                    PrTable.AddPermission,
+                                                    PrTable.DelPermission,
+                                                    PrTable.EditPermission,
+                                                    PrTable.viewPermission
 
                                                 })
                                    }

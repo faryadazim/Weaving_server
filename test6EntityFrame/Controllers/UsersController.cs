@@ -13,8 +13,7 @@ using System.Web.Http.Description;
 using DAL;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using test6EntityFrame.Models;
-using WebApplication5.Models;
+using test6EntityFrame.Models; 
 
 namespace test6EntityFrame.Controllers
 {
@@ -40,10 +39,6 @@ namespace test6EntityFrame.Controllers
         public IHttpActionResult GetAspNetUsers()
         {
         var data= db.AspNetUsers;
-
-         
-
-
             var user = (from urole in db.AspNetUserRoles
                         join userdb in db.AspNetUsers on urole.UserId equals userdb.Id
                         from role in db.AspNetRoles
