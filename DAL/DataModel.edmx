@@ -39,6 +39,20 @@ warning 6002: The table/view 'db_weaving.dbo.AspNetUserRoles' does not have a pr
           <Property Name="AccessFailedCount" Type="int" Nullable="false" />
           <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
         </EntityType>
+        <EntityType Name="BorderQuality">
+          <Key>
+            <PropertyRef Name="borderQuality_id" />
+          </Key>
+          <Property Name="borderQuality_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="borderQuality" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="BorderSize">
+          <Key>
+            <PropertyRef Name="borderSize_id" />
+          </Key>
+          <Property Name="borderSize_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="borderSize" Type="varchar(max)" />
+        </EntityType>
         <EntityType Name="employeeDesignation">
           <Key>
             <PropertyRef Name="designation_id" />
@@ -120,6 +134,8 @@ warning 6002: The table/view 'db_weaving.dbo.AspNetUserRoles' does not have a pr
         <EntityContainer Name="db_weavingModelStoreContainer">
           <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BorderQuality" EntityType="Self.BorderQuality" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BorderSize" EntityType="Self.BorderSize" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="employeeDesignation" EntityType="Self.employeeDesignation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="employeeList" EntityType="Self.employeeList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LoomList" EntityType="Self.LoomList" Schema="dbo" store:Type="Tables" />
@@ -149,6 +165,8 @@ warning 6002: The table/view 'db_weaving.dbo.AspNetUserRoles' does not have a pr
           <EntitySet Name="employeeList" EntityType="db_weavingModel.employeeList" />
           <EntitySet Name="LoomList" EntityType="db_weavingModel.LoomList" />
           <EntitySet Name="weavingUnit" EntityType="db_weavingModel.weavingUnit" />
+          <EntitySet Name="BorderQuality" EntityType="db_weavingModel.BorderQuality" />
+          <EntitySet Name="BorderSize" EntityType="db_weavingModel.BorderSize" />
         </EntityContainer>
         <EntityType Name="AspNetRoles">
           <Key>
@@ -259,6 +277,20 @@ warning 6002: The table/view 'db_weaving.dbo.AspNetUserRoles' does not have a pr
           </Key>
           <Property Name="weavingUnit_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="weavingUnitName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="BorderQuality">
+          <Key>
+            <PropertyRef Name="borderQuality_id" />
+          </Key>
+          <Property Name="borderQuality_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="borderQuality1" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="BorderSize">
+          <Key>
+            <PropertyRef Name="borderSize_id" />
+          </Key>
+          <Property Name="borderSize_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="borderSize1" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -382,6 +414,22 @@ warning 6002: The table/view 'db_weaving.dbo.AspNetUserRoles' does not have a pr
               <MappingFragment StoreEntitySet="weavingUnit">
                 <ScalarProperty Name="weavingUnitName" ColumnName="weavingUnitName" />
                 <ScalarProperty Name="weavingUnit_id" ColumnName="weavingUnit_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BorderQuality">
+            <EntityTypeMapping TypeName="db_weavingModel.BorderQuality">
+              <MappingFragment StoreEntitySet="BorderQuality">
+                <ScalarProperty Name="borderQuality1" ColumnName="borderQuality" />
+                <ScalarProperty Name="borderQuality_id" ColumnName="borderQuality_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BorderSize">
+            <EntityTypeMapping TypeName="db_weavingModel.BorderSize">
+              <MappingFragment StoreEntitySet="BorderSize">
+                <ScalarProperty Name="borderSize1" ColumnName="borderSize" />
+                <ScalarProperty Name="borderSize_id" ColumnName="borderSize_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
