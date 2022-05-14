@@ -15,15 +15,16 @@ namespace test6EntityFrame.Controllers
     public class BorderSizesController : ApiController
     {
         private db_weavingEntities db = new db_weavingEntities();
-
-        // GET: api/BorderSizes
-        public IQueryable<BorderSize> GetBorderSize()
+ 
+        [Route("api/BorderSizes")]
+        public HttpResponseMessage GetBorderSize()
         {
-            return db.BorderSize;
+             
+            return Request.CreateResponse(HttpStatusCode.OK, db.BorderSize);
         }
-
-        // GET: api/BorderSizes/5
-        [ResponseType(typeof(BorderSize))]
+         
+        //[Route("api/BorderQuality")]
+    
         public IHttpActionResult GetBorderSize(int id)
         {
             BorderSize borderSize = db.BorderSize.Find(id);

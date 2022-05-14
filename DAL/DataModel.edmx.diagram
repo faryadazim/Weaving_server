@@ -15,8 +15,8 @@
         <EntityTypeShape EntityType="db_weavingModel.employeeList" Width="1.75" PointX="0.5" PointY="7.625" />
         <EntityTypeShape EntityType="db_weavingModel.LoomList" Width="1.5" PointX="0.5" PointY="13" />
         <EntityTypeShape EntityType="db_weavingModel.weavingUnit" Width="1.5" PointX="2.25" PointY="13" />
-        <EntityTypeShape EntityType="db_weavingModel.BorderQuality" Width="1.5" PointX="4" PointY="15.75" />
-        <EntityTypeShape EntityType="db_weavingModel.BorderSize" Width="1.5" PointX="2.25" PointY="15.75" />
+        <EntityTypeShape EntityType="db_weavingModel.BorderQuality" Width="1.5" PointX="4" PointY="15.375" />
+        <EntityTypeShape EntityType="db_weavingModel.BorderSize" Width="1.5" PointX="2.25" PointY="15.375" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
