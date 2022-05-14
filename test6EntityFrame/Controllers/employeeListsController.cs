@@ -16,103 +16,99 @@ namespace test6EntityFrame.Controllers
     {
         private db_weavingEntities db = new db_weavingEntities();
 
-        // GET: api/employeeLists
-        public IQueryable<employeeList> GetemployeeList()
+        [Route("api/employeeLists")]
+        public HttpResponseMessage GetemployeeList()
         {
-            return db.employeeList;
+            return Request.CreateResponse(HttpStatusCode.OK, db.employeeList);
         }
 
-        // GET: api/employeeLists/5
-        [ResponseType(typeof(employeeList))]
-        public IHttpActionResult GetemployeeList(int id)
+        [Route("api/employeeListsById")]
+        public HttpResponseMessage GetemployeeListById(int id)
         {
-            employeeList employeeList = db.employeeList.Find(id);
-            if (employeeList == null)
+            employeeList entity = db.employeeList.Find(id);
+            if (entity == null)
             {
-                return NotFound();
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Record Not Found");
             }
-
-            return Ok(employeeList);
+            return Request.CreateResponse(HttpStatusCode.OK, entity);
         }
 
-        // PUT: api/employeeLists/5
-        [ResponseType(typeof(void))]
-        public IHttpActionResult PutemployeeList(int id, employeeList employeeList)
+        [Route("api/employeeLists")]
+        public HttpResponseMessage PutemployeeList(employeeList employeeList)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != employeeList.employee_Id)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(employeeList).State = EntityState.Modified;
 
             try
             {
+                using (db_weavingEntities db = new db_weavingEntities())
+                {
+                    var entity = db.employeeList.FirstOrDefault(e => e.employee_Id == employeeList.employee_Id);
+                    if (entity == null)
+                    {
+                        return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Record not Found");
+                    }
+                    else
+                    {
+                        entity.employee_Id = employeeList.employee_Id;
+                        entity.name = employeeList.name;
+                        entity.fatherName = employeeList.fatherName;
+                        entity.phoneNum1 = employeeList.phoneNum1;
+                        entity.phoneNum2 = employeeList.phoneNum2;
+                        entity.phoneNum3 = employeeList.phoneNum3;
+                        entity.homePhoneNum = employeeList.homePhoneNum;
+                        entity.cnicNum = employeeList.cnicNum;
+                        entity.address = employeeList.address;
+                        entity.referenceName = employeeList.referenceName;
+                        entity.referencePhoneNum = employeeList.referencePhoneNum;
+                        entity.jobStatus = employeeList.jobStatus;
+                        entity.designation = employeeList.designation;
+                        entity.employeePic1 = employeeList.employeePic1;
+                        entity.employeePic2 = employeeList.employeePic1;
+                        entity.employeeCnicFront = employeeList.employeeCnicFront;
+                        entity.employeeCnicBsck = employeeList.employeeCnicBsck;
+                        entity.recruitmentType = employeeList.recruitmentType;
+                        entity.weeklySalary = employeeList.weeklySalary;
+                        entity.monthlySalary = employeeList.monthlySalary;
+                        db.SaveChanges();
+                        return Request.CreateResponse(HttpStatusCode.OK, entity);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+        }
+
+        [Route("api/employeeLists")]
+        public HttpResponseMessage PostemployeeList(employeeList employeeListForPost)
+        {
+            try
+            {
+                db.employeeList.Add(employeeListForPost);
                 db.SaveChanges();
+                var message = Request.CreateResponse(HttpStatusCode.Created, employeeListForPost);
+                message.Headers.Location = new Uri(Request.RequestUri + employeeListForPost.employee_Id.ToString());
+                return message;
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (!employeeListExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
             }
-
-            return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/employeeLists
-        [ResponseType(typeof(employeeList))]
-        public IHttpActionResult PostemployeeList(employeeList employeeList)
+        [Route("api/employeeLists")]
+        public HttpResponseMessage DeleteemployeeList(int id)
         {
-            if (!ModelState.IsValid)
+            employeeList entity = db.employeeList.Find(id);
+            if (entity == null)
             {
-                return BadRequest(ModelState);
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Record not Found");
             }
-
-            db.employeeList.Add(employeeList);
+            db.employeeList.Remove(entity);
             db.SaveChanges();
-
-            return CreatedAtRoute("DefaultApi", new { id = employeeList.employee_Id }, employeeList);
+            return Request.CreateResponse(HttpStatusCode.OK, entity);
         }
 
-        // DELETE: api/employeeLists/5
-        [ResponseType(typeof(employeeList))]
-        public IHttpActionResult DeleteemployeeList(int id)
-        {
-            employeeList employeeList = db.employeeList.Find(id);
-            if (employeeList == null)
-            {
-                return NotFound();
-            }
 
-            db.employeeList.Remove(employeeList);
-            db.SaveChanges();
-
-            return Ok(employeeList);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        private bool employeeListExists(int id)
-        {
-            return db.employeeList.Count(e => e.employee_Id == id) > 0;
-        }
     }
 }

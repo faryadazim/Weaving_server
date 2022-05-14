@@ -15,105 +15,87 @@ namespace test6EntityFrame.Controllers
     public class BorderSizesController : ApiController
     {
         private db_weavingEntities db = new db_weavingEntities();
- 
+
         [Route("api/BorderSizes")]
         public HttpResponseMessage GetBorderSize()
         {
-             
             return Request.CreateResponse(HttpStatusCode.OK, db.BorderSize);
         }
-         
-        //[Route("api/BorderQuality")]
-    
-        public IHttpActionResult GetBorderSize(int id)
-        {
-            BorderSize borderSize = db.BorderSize.Find(id);
-            if (borderSize == null)
-            {
-                return NotFound();
-            }
 
-            return Ok(borderSize);
+        [Route("api/BorderSizesById")]
+
+        public HttpResponseMessage GetBorderSizeById(int id)
+        {
+            BorderSize entity = db.BorderSize.Find(id);
+            if (entity == null)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Record Not Found");
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, entity);
         }
 
-        // PUT: api/BorderSizes/5
-        [ResponseType(typeof(void))]
-        public IHttpActionResult PutBorderSize(int id, BorderSize borderSize)
+
+        [Route("api/BorderSizes")]
+        public HttpResponseMessage PutBorderSize(BorderSize borderSize)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
-            }
+                using (db_weavingEntities db = new db_weavingEntities())
+                {
+                    var entity = db.BorderSize.FirstOrDefault(e => e.borderSize_id == borderSize.borderSize_id);
+                    if (entity == null)
+                    {
+                        return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Record not Found");
+                    }
+                    else
+                    {
+                        entity.borderSize_id = borderSize.borderSize_id;
+                        entity.borderSize1 = borderSize.borderSize1;
+                        db.SaveChanges();
+                        return Request.CreateResponse(HttpStatusCode.OK, entity);
+                    }
 
-            if (id != borderSize.borderSize_id)
+                }
+            }
+            catch (Exception ex)
             {
-                return BadRequest();
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
             }
+        }
 
-            db.Entry(borderSize).State = EntityState.Modified;
+        [Route("api/BorderSizes")]
+        public HttpResponseMessage PostBorderSize(BorderSize borderSizeForPost)
+        {
 
             try
             {
+                db.BorderSize.Add(borderSizeForPost);
                 db.SaveChanges();
+
+                var message = Request.CreateResponse(HttpStatusCode.Created, borderSizeForPost);
+                message.Headers.Location = new Uri(Request.RequestUri + borderSizeForPost.borderSize_id.ToString());
+                return message;
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (!BorderSizeExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
             }
 
-            return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/BorderSizes
-        [ResponseType(typeof(BorderSize))]
-        public IHttpActionResult PostBorderSize(BorderSize borderSize)
+        [Route("api/BorderSizes")]
+        public HttpResponseMessage DeleteBorderSize(int id)
         {
-            if (!ModelState.IsValid)
+            BorderSize entity = db.BorderSize.Find(id);
+            if (entity == null)
             {
-                return BadRequest(ModelState);
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Record not Found");
             }
-
-            db.BorderSize.Add(borderSize);
+            db.BorderSize.Remove(entity);
             db.SaveChanges();
-
-            return CreatedAtRoute("DefaultApi", new { id = borderSize.borderSize_id }, borderSize);
+            return Request.CreateResponse(HttpStatusCode.OK, entity);
         }
 
-        // DELETE: api/BorderSizes/5
-        [ResponseType(typeof(BorderSize))]
-        public IHttpActionResult DeleteBorderSize(int id)
-        {
-            BorderSize borderSize = db.BorderSize.Find(id);
-            if (borderSize == null)
-            {
-                return NotFound();
-            }
 
-            db.BorderSize.Remove(borderSize);
-            db.SaveChanges();
-
-            return Ok(borderSize);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        private bool BorderSizeExists(int id)
-        {
-            return db.BorderSize.Count(e => e.borderSize_id == id) > 0;
-        }
     }
 }

@@ -16,103 +16,92 @@ namespace test6EntityFrame.Controllers
     {
         private db_weavingEntities db = new db_weavingEntities();
 
-        // GET: api/employeeDesignations
-        public IQueryable<employeeDesignation> GetemployeeDesignation()
+        [Route("api/employeeDesignations")]
+        public HttpResponseMessage GetemployeeDesignation()
         {
-            return db.employeeDesignation;
+            return Request.CreateResponse(HttpStatusCode.OK, db.employeeDesignation);
         }
 
-        // GET: api/employeeDesignations/5
-        [ResponseType(typeof(employeeDesignation))]
-        public IHttpActionResult GetemployeeDesignation(int id)
+
+        [Route("api/employeeDesignationsById")]
+        public HttpResponseMessage GetemployeeDesignationById(int id)
         {
-            employeeDesignation employeeDesignation = db.employeeDesignation.Find(id);
-            if (employeeDesignation == null)
+            employeeDesignation entity = db.employeeDesignation.Find(id);
+            if (entity == null)
             {
-                return NotFound();
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Record not Found");
             }
 
-            return Ok(employeeDesignation);
+
+            return Request.CreateResponse(HttpStatusCode.OK, entity);
         }
 
-        // PUT: api/employeeDesignations/5
+
+        [Route("api/employeeDesignations")]
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutemployeeDesignation(int id, employeeDesignation employeeDesignation)
+        public HttpResponseMessage PutemployeeDesignation(employeeDesignation employeeDesignation)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != employeeDesignation.designation_id)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(employeeDesignation).State = EntityState.Modified;
-
             try
             {
+                using (db_weavingEntities db = new db_weavingEntities())
+                {
+                    var entity = db.employeeDesignation.FirstOrDefault(e => e.designation_id == employeeDesignation.designation_id);
+                    if (entity == null)
+                    {
+                        return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Record not Found");
+                    }
+                    else
+                    {
+                        entity.designation_id = employeeDesignation.designation_id;
+                        entity.designationName = employeeDesignation.designationName;
+                        db.SaveChanges();
+                        return Request.CreateResponse(HttpStatusCode.OK, entity);
+
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+
+        }
+
+
+        [Route("api/employeeDesignations")]
+        public HttpResponseMessage PostemployeeDesignation(employeeDesignation employeeDesignationForPost)
+        {
+            try
+            {
+                db.employeeDesignation.Add(employeeDesignationForPost);
                 db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!employeeDesignationExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
 
-            return StatusCode(HttpStatusCode.NoContent);
+                var message = Request.CreateResponse(HttpStatusCode.Created, employeeDesignationForPost);
+                message.Headers.Location = new Uri(Request.RequestUri + employeeDesignationForPost.designation_id.ToString());
+                return message;
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
         }
 
-        // POST: api/employeeDesignations
-        [ResponseType(typeof(employeeDesignation))]
-        public IHttpActionResult PostemployeeDesignation(employeeDesignation employeeDesignation)
+        [Route("api/employeeDesignations")]
+        public HttpResponseMessage DeleteemployeeDesignation(int id)
         {
-            if (!ModelState.IsValid)
+            employeeDesignation entity = db.employeeDesignation.Find(id);
+            if (entity == null)
             {
-                return BadRequest(ModelState);
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Record not Found");
             }
 
-            db.employeeDesignation.Add(employeeDesignation);
+            db.employeeDesignation.Remove(entity);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = employeeDesignation.designation_id }, employeeDesignation);
+            return Request.CreateResponse(HttpStatusCode.OK, entity);
         }
 
-        // DELETE: api/employeeDesignations/5
-        [ResponseType(typeof(employeeDesignation))]
-        public IHttpActionResult DeleteemployeeDesignation(int id)
-        {
-            employeeDesignation employeeDesignation = db.employeeDesignation.Find(id);
-            if (employeeDesignation == null)
-            {
-                return NotFound();
-            }
 
-            db.employeeDesignation.Remove(employeeDesignation);
-            db.SaveChanges();
-
-            return Ok(employeeDesignation);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        private bool employeeDesignationExists(int id)
-        {
-            return db.employeeDesignation.Count(e => e.designation_id == id) > 0;
-        }
     }
 }

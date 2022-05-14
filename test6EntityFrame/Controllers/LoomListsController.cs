@@ -16,103 +16,92 @@ namespace test6EntityFrame.Controllers
     {
         private db_weavingEntities db = new db_weavingEntities();
 
-        // GET: api/LoomLists
-        public IQueryable<LoomList> GetLoomList()
+        
+
+        [Route("api/LoomLists")]
+        public HttpResponseMessage GetLoomList()
         {
-            return db.LoomList;
+            return Request.CreateResponse(HttpStatusCode.OK, db.LoomList);
         }
 
-        // GET: api/LoomLists/5
-        [ResponseType(typeof(LoomList))]
-        public IHttpActionResult GetLoomList(int id)
-        {
-            LoomList loomList = db.LoomList.Find(id);
-            if (loomList == null)
-            {
-                return NotFound();
-            }
 
-            return Ok(loomList);
+
+
+
+        [Route("api/LoomListsById")]
+        public HttpResponseMessage GetLoomListById(int id)
+        {
+            LoomList entity = db.LoomList.Find(id);
+            if (entity == null)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Record Not Found");
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, entity);
         }
 
-        // PUT: api/LoomLists/5
-        [ResponseType(typeof(void))]
-        public IHttpActionResult PutLoomList(int id, LoomList loomList)
+
+        [Route("api/LoomLists")]
+        public HttpResponseMessage PutLoomList( LoomList loomList)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
 
-            if (id != loomList.loom_id)
-            {
-                return BadRequest();
-            }
 
-            db.Entry(loomList).State = EntityState.Modified;
 
             try
             {
+                using (db_weavingEntities db = new db_weavingEntities())
+                {
+                    var entity = db.LoomList.FirstOrDefault(e => e.loom_id == loomList.loom_id);
+                    if (entity == null)
+                    {
+                        return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Record not Found");
+                    }
+                    else
+                    {
+                        entity.loom_id = loomList.loom_id;
+                        entity.loomSize = loomList.loomSize;
+                        entity.loomNumber = loomList.loomNumber;
+                        entity.jacquard = loomList.jacquard;
+                        entity.drawBox = loomList.drawBox;
+                        db.SaveChanges();
+                        return Request.CreateResponse(HttpStatusCode.OK, entity);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+        }
+        [Route("api/LoomLists")]
+        public HttpResponseMessage PostLoomList(LoomList loomListForPost)
+        {
+            try
+            {
+                db.LoomList.Add(loomListForPost);
                 db.SaveChanges();
+                var message = Request.CreateResponse(HttpStatusCode.Created, loomListForPost);
+                message.Headers.Location = new Uri(Request.RequestUri + loomListForPost.loom_id.ToString());
+                return message;
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (!LoomListExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
             }
-
-            return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/LoomLists
-        [ResponseType(typeof(LoomList))]
-        public IHttpActionResult PostLoomList(LoomList loomList)
+        [Route("api/LoomLists")]
+        public HttpResponseMessage DeleteLoomList(int id)
         {
-            if (!ModelState.IsValid)
+            LoomList entity = db.LoomList.Find(id); 
+            if (entity == null)
             {
-                return BadRequest(ModelState);
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Record not Found");
             }
-
-            db.LoomList.Add(loomList);
+            db.LoomList.Remove(entity);
             db.SaveChanges();
-
-            return CreatedAtRoute("DefaultApi", new { id = loomList.loom_id }, loomList);
+            return Request.CreateResponse(HttpStatusCode.OK, entity);
         }
 
-        // DELETE: api/LoomLists/5
-        [ResponseType(typeof(LoomList))]
-        public IHttpActionResult DeleteLoomList(int id)
-        {
-            LoomList loomList = db.LoomList.Find(id);
-            if (loomList == null)
-            {
-                return NotFound();
-            }
-
-            db.LoomList.Remove(loomList);
-            db.SaveChanges();
-
-            return Ok(loomList);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        private bool LoomListExists(int id)
-        {
-            return db.LoomList.Count(e => e.loom_id == id) > 0;
-        }
+        
     }
 }
