@@ -12,22 +12,26 @@ using DAL;
 
 namespace test6EntityFrame.Controllers
 {
-    public class weavingUnitsController : ApiController
+    public class LoomListsController : ApiController
     {
         private db_weavingEntities db = new db_weavingEntities();
 
-        // GET: api/weavingUnits
-        public HttpResponseMessage GetweavingUnit()
-        {
+        
 
-            return Request.CreateResponse(HttpStatusCode.OK, db.weavingUnit);
+        [Route("api/LoomLists")]
+        public HttpResponseMessage GetLoomList()
+        {
+            return Request.CreateResponse(HttpStatusCode.OK, db.LoomList);
         }
 
-        // GET: api/weavingUnits/5
-        [ResponseType(typeof(weavingUnit))]
-        public HttpResponseMessage GetweavingUnit(int id)
+
+
+
+
+        [Route("api/LoomListsById")]
+        public HttpResponseMessage GetLoomListById(int id)
         {
-            weavingUnit entity = db.weavingUnit.Find(id);
+            LoomList entity = db.LoomList.Find(id);
             if (entity == null)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Record Not Found");
@@ -35,75 +39,69 @@ namespace test6EntityFrame.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, entity);
         }
 
-        // PUT: api/weavingUnits/5
-        [ResponseType(typeof(void))]
-        public HttpResponseMessage PutweavingUnit(weavingUnit weavingUnit)
+
+        [Route("api/LoomLists")]
+        public HttpResponseMessage PutLoomList( LoomList loomList)
         {
+
 
 
             try
             {
                 using (db_weavingEntities db = new db_weavingEntities())
                 {
-                    var entity = db.weavingUnit.FirstOrDefault(e => e.weavingUnit_id == weavingUnit.weavingUnit_id);
+                    var entity = db.LoomList.FirstOrDefault(e => e.loom_id == loomList.loom_id);
                     if (entity == null)
                     {
                         return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Record not Found");
                     }
                     else
                     {
-                        entity.weavingUnit_id = weavingUnit.weavingUnit_id;
-                        entity.weavingUnitName = weavingUnit.weavingUnitName; //here quality1 mean quality name
+                        entity.loom_id = loomList.loom_id;
+                        entity.loomSize = loomList.loomSize;
+                        entity.loomNumber = loomList.loomNumber;
+                        entity.jacquard = loomList.jacquard;
+                        entity.drawBox = loomList.drawBox;
                         db.SaveChanges();
                         return Request.CreateResponse(HttpStatusCode.OK, entity);
-
                     }
-
                 }
             }
             catch (Exception ex)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
             }
-
         }
-
-        // POST: api/weavingUnits
-        [ResponseType(typeof(weavingUnit))]
-        public HttpResponseMessage PostweavingUnit(weavingUnit weavingUnitForPost)
+        [Route("api/LoomLists")]
+        public HttpResponseMessage PostLoomList(LoomList loomListForPost)
         {
             try
             {
-                db.weavingUnit.Add(weavingUnitForPost);
+                db.LoomList.Add(loomListForPost);
                 db.SaveChanges();
-
-                var message = Request.CreateResponse(HttpStatusCode.Created, weavingUnitForPost);
-                message.Headers.Location = new Uri(Request.RequestUri + weavingUnitForPost.weavingUnit_id.ToString());
+                var message = Request.CreateResponse(HttpStatusCode.Created, loomListForPost);
+                message.Headers.Location = new Uri(Request.RequestUri + loomListForPost.loom_id.ToString());
                 return message;
             }
             catch (Exception ex)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
             }
-
         }
 
-        // DELETE: api/weavingUnits/5
-        [ResponseType(typeof(weavingUnit))]
-        public HttpResponseMessage DeleteweavingUnit(int id)
+        [Route("api/LoomLists")]
+        public HttpResponseMessage DeleteLoomList(int id)
         {
-
-            weavingUnit entity = db.weavingUnit.Find(id);
+            LoomList entity = db.LoomList.Find(id); 
             if (entity == null)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Record not Found");
             }
-
-            db.weavingUnit.Remove(entity);
+            db.LoomList.Remove(entity);
             db.SaveChanges();
-
             return Request.CreateResponse(HttpStatusCode.OK, entity);
         }
 
+        
     }
 }

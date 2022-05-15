@@ -12,22 +12,21 @@ using DAL;
 
 namespace test6EntityFrame.Controllers
 {
-    public class weavingUnitsController : ApiController
+    public class BorderSizesController : ApiController
     {
         private db_weavingEntities db = new db_weavingEntities();
 
-        // GET: api/weavingUnits
-        public HttpResponseMessage GetweavingUnit()
+        [Route("api/BorderSizes")]
+        public HttpResponseMessage GetBorderSize()
         {
-
-            return Request.CreateResponse(HttpStatusCode.OK, db.weavingUnit);
+            return Request.CreateResponse(HttpStatusCode.OK, db.BorderSize);
         }
 
-        // GET: api/weavingUnits/5
-        [ResponseType(typeof(weavingUnit))]
-        public HttpResponseMessage GetweavingUnit(int id)
+        [Route("api/BorderSizesById")]
+
+        public HttpResponseMessage GetBorderSizeById(int id)
         {
-            weavingUnit entity = db.weavingUnit.Find(id);
+            BorderSize entity = db.BorderSize.Find(id);
             if (entity == null)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Record Not Found");
@@ -35,28 +34,25 @@ namespace test6EntityFrame.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, entity);
         }
 
-        // PUT: api/weavingUnits/5
-        [ResponseType(typeof(void))]
-        public HttpResponseMessage PutweavingUnit(weavingUnit weavingUnit)
+
+        [Route("api/BorderSizes")]
+        public HttpResponseMessage PutBorderSize(BorderSize borderSize)
         {
-
-
             try
             {
                 using (db_weavingEntities db = new db_weavingEntities())
                 {
-                    var entity = db.weavingUnit.FirstOrDefault(e => e.weavingUnit_id == weavingUnit.weavingUnit_id);
+                    var entity = db.BorderSize.FirstOrDefault(e => e.borderSize_id == borderSize.borderSize_id);
                     if (entity == null)
                     {
                         return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Record not Found");
                     }
                     else
                     {
-                        entity.weavingUnit_id = weavingUnit.weavingUnit_id;
-                        entity.weavingUnitName = weavingUnit.weavingUnitName; //here quality1 mean quality name
+                        entity.borderSize_id = borderSize.borderSize_id;
+                        entity.borderSize1 = borderSize.borderSize1;
                         db.SaveChanges();
                         return Request.CreateResponse(HttpStatusCode.OK, entity);
-
                     }
 
                 }
@@ -65,20 +61,19 @@ namespace test6EntityFrame.Controllers
             {
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
             }
-
         }
 
-        // POST: api/weavingUnits
-        [ResponseType(typeof(weavingUnit))]
-        public HttpResponseMessage PostweavingUnit(weavingUnit weavingUnitForPost)
+        [Route("api/BorderSizes")]
+        public HttpResponseMessage PostBorderSize(BorderSize borderSizeForPost)
         {
+
             try
             {
-                db.weavingUnit.Add(weavingUnitForPost);
+                db.BorderSize.Add(borderSizeForPost);
                 db.SaveChanges();
 
-                var message = Request.CreateResponse(HttpStatusCode.Created, weavingUnitForPost);
-                message.Headers.Location = new Uri(Request.RequestUri + weavingUnitForPost.weavingUnit_id.ToString());
+                var message = Request.CreateResponse(HttpStatusCode.Created, borderSizeForPost);
+                message.Headers.Location = new Uri(Request.RequestUri + borderSizeForPost.borderSize_id.ToString());
                 return message;
             }
             catch (Exception ex)
@@ -88,22 +83,19 @@ namespace test6EntityFrame.Controllers
 
         }
 
-        // DELETE: api/weavingUnits/5
-        [ResponseType(typeof(weavingUnit))]
-        public HttpResponseMessage DeleteweavingUnit(int id)
+        [Route("api/BorderSizes")]
+        public HttpResponseMessage DeleteBorderSize(int id)
         {
-
-            weavingUnit entity = db.weavingUnit.Find(id);
+            BorderSize entity = db.BorderSize.Find(id);
             if (entity == null)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Record not Found");
             }
-
-            db.weavingUnit.Remove(entity);
+            db.BorderSize.Remove(entity);
             db.SaveChanges();
-
             return Request.CreateResponse(HttpStatusCode.OK, entity);
         }
+
 
     }
 }

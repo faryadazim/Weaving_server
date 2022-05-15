@@ -12,48 +12,52 @@ using DAL;
 
 namespace test6EntityFrame.Controllers
 {
-    public class weavingUnitsController : ApiController
+    public class BorderQualityController : ApiController
     {
         private db_weavingEntities db = new db_weavingEntities();
 
-        // GET: api/weavingUnits
-        public HttpResponseMessage GetweavingUnit()
+
+        [Route("api/BorderQuality")]
+        public HttpResponseMessage GetBorderQuality()
         {
 
-            return Request.CreateResponse(HttpStatusCode.OK, db.weavingUnit);
+            return Request.CreateResponse(HttpStatusCode.OK, db.BorderQuality);
         }
 
-        // GET: api/weavingUnits/5
-        [ResponseType(typeof(weavingUnit))]
-        public HttpResponseMessage GetweavingUnit(int id)
+
+
+        [Route("api/BorderQualityById")]
+        public HttpResponseMessage GetBorderQualityById(int id)
         {
-            weavingUnit entity = db.weavingUnit.Find(id);
+            BorderQuality entity = db.BorderQuality.Find(id);
             if (entity == null)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Record Not Found");
             }
-            return Request.CreateResponse(HttpStatusCode.OK, entity);
+            else
+            {
+
+                return Request.CreateResponse(HttpStatusCode.OK, entity);
+
+            }
+
         }
-
-        // PUT: api/weavingUnits/5
-        [ResponseType(typeof(void))]
-        public HttpResponseMessage PutweavingUnit(weavingUnit weavingUnit)
+        [Route("api/BorderQuality")]
+        public HttpResponseMessage PutBorderQuality(BorderQuality borderQuality)
         {
-
-
             try
             {
                 using (db_weavingEntities db = new db_weavingEntities())
                 {
-                    var entity = db.weavingUnit.FirstOrDefault(e => e.weavingUnit_id == weavingUnit.weavingUnit_id);
+                    var entity = db.BorderQuality.FirstOrDefault(e => e.borderQuality_id == borderQuality.borderQuality_id);
                     if (entity == null)
                     {
                         return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Record not Found");
                     }
                     else
                     {
-                        entity.weavingUnit_id = weavingUnit.weavingUnit_id;
-                        entity.weavingUnitName = weavingUnit.weavingUnitName; //here quality1 mean quality name
+                        entity.borderQuality_id = borderQuality.borderQuality_id;
+                        entity.borderQuality1 = borderQuality.borderQuality1; //here quality1 mean quality name
                         db.SaveChanges();
                         return Request.CreateResponse(HttpStatusCode.OK, entity);
 
@@ -65,20 +69,18 @@ namespace test6EntityFrame.Controllers
             {
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
             }
-
         }
 
-        // POST: api/weavingUnits
-        [ResponseType(typeof(weavingUnit))]
-        public HttpResponseMessage PostweavingUnit(weavingUnit weavingUnitForPost)
+        [Route("api/BorderQuality")]
+        public HttpResponseMessage PostBorderQuality(BorderQuality borderQualityForPost)
         {
             try
             {
-                db.weavingUnit.Add(weavingUnitForPost);
+                db.BorderQuality.Add(borderQualityForPost);
                 db.SaveChanges();
 
-                var message = Request.CreateResponse(HttpStatusCode.Created, weavingUnitForPost);
-                message.Headers.Location = new Uri(Request.RequestUri + weavingUnitForPost.weavingUnit_id.ToString());
+                var message = Request.CreateResponse(HttpStatusCode.Created, borderQualityForPost);
+                message.Headers.Location = new Uri(Request.RequestUri + borderQualityForPost.borderQuality_id.ToString());
                 return message;
             }
             catch (Exception ex)
@@ -87,19 +89,16 @@ namespace test6EntityFrame.Controllers
             }
 
         }
-
-        // DELETE: api/weavingUnits/5
-        [ResponseType(typeof(weavingUnit))]
-        public HttpResponseMessage DeleteweavingUnit(int id)
+        [Route("api/BorderQuality")]
+        public HttpResponseMessage DeleteBorderQuality(int id)
         {
-
-            weavingUnit entity = db.weavingUnit.Find(id);
+            BorderQuality entity = db.BorderQuality.Find(id);
             if (entity == null)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Record not Found");
             }
 
-            db.weavingUnit.Remove(entity);
+            db.BorderQuality.Remove(entity);
             db.SaveChanges();
 
             return Request.CreateResponse(HttpStatusCode.OK, entity);

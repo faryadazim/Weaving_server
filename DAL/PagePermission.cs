@@ -16,7 +16,7 @@ namespace DAL
     {
         public string PermissionId { get; set; }
         public string RoleId { get; set; }
-        public string PageId { get; set; }
+        public Nullable<int> PageId { get; set; }
         public string EditPermission { get; set; }
         public string viewPermission { get; set; }
         public string DelPermission { get; set; }

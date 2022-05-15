@@ -14,7 +14,7 @@ namespace DAL
     
     public partial class Modules
     {
-        public string module_id { get; set; }
+        public int module_id { get; set; }
         public string module_name { get; set; }
         public string module_icon { get; set; }
     }

@@ -14,9 +14,9 @@ namespace DAL
     
     public partial class Pages
     {
-        public string page_id { get; set; }
+        public int page_id { get; set; }
         public string page_name { get; set; }
         public string page_link { get; set; }
-        public string module_id { get; set; }
+        public Nullable<int> module_id { get; set; }
     }
 }

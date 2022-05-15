@@ -99,7 +99,7 @@ warning 6002: The table/view 'db_weaving.dbo.AspNetUserRoles' does not have a pr
           <Key>
             <PropertyRef Name="module_id" />
           </Key>
-          <Property Name="module_id" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="module_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="module_name" Type="varchar(max)" />
           <Property Name="module_icon" Type="varchar(max)" />
         </EntityType>
@@ -108,21 +108,21 @@ warning 6002: The table/view 'db_weaving.dbo.AspNetUserRoles' does not have a pr
             <PropertyRef Name="PermissionId" />
           </Key>
           <Property Name="PermissionId" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="RoleId" Type="varchar(max)" />
-          <Property Name="PageId" Type="varchar(max)" />
+          <Property Name="RoleId" Type="nvarchar" MaxLength="128" />
+          <Property Name="PageId" Type="int" />
           <Property Name="EditPermission" Type="varchar(max)" />
           <Property Name="viewPermission" Type="varchar(max)" />
-          <Property Name="DelPermission" Type="varchar(max)" />
+          <Property Name="DelPermission" Type="varchar(max)" Nullable="false" />
           <Property Name="AddPermission" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="Pages">
           <Key>
             <PropertyRef Name="page_id" />
           </Key>
-          <Property Name="page_id" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="page_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="page_name" Type="varchar(max)" />
           <Property Name="page_link" Type="varchar(max)" />
-          <Property Name="module_id" Type="nvarchar" MaxLength="50" />
+          <Property Name="module_id" Type="int" />
         </EntityType>
         <EntityType Name="weavingUnit">
           <Key>
@@ -156,17 +156,17 @@ warning 6002: The table/view 'db_weaving.dbo.AspNetUserRoles' does not have a pr
       <Schema Namespace="db_weavingModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="db_weavingEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AspNetRoles" EntityType="db_weavingModel.AspNetRoles" />
-          <EntitySet Name="AspNetUserRoles" EntityType="db_weavingModel.AspNetUserRoles" />
           <EntitySet Name="AspNetUsers" EntityType="db_weavingModel.AspNetUsers" />
-          <EntitySet Name="Modules" EntityType="db_weavingModel.Modules" />
-          <EntitySet Name="Pages" EntityType="db_weavingModel.Pages" />
-          <EntitySet Name="PagePermission" EntityType="db_weavingModel.PagePermission" />
+          <EntitySet Name="BorderQuality" EntityType="db_weavingModel.BorderQuality" />
+          <EntitySet Name="BorderSize" EntityType="db_weavingModel.BorderSize" />
           <EntitySet Name="employeeDesignation" EntityType="db_weavingModel.employeeDesignation" />
           <EntitySet Name="employeeList" EntityType="db_weavingModel.employeeList" />
           <EntitySet Name="LoomList" EntityType="db_weavingModel.LoomList" />
+          <EntitySet Name="Modules" EntityType="db_weavingModel.Modules" />
+          <EntitySet Name="Pages" EntityType="db_weavingModel.Pages" />
           <EntitySet Name="weavingUnit" EntityType="db_weavingModel.weavingUnit" />
-          <EntitySet Name="BorderQuality" EntityType="db_weavingModel.BorderQuality" />
-          <EntitySet Name="BorderSize" EntityType="db_weavingModel.BorderSize" />
+          <EntitySet Name="AspNetUserRoles" EntityType="db_weavingModel.AspNetUserRoles" />
+          <EntitySet Name="PagePermission" EntityType="db_weavingModel.PagePermission" />
         </EntityContainer>
         <EntityType Name="AspNetRoles">
           <Key>
@@ -174,14 +174,6 @@ warning 6002: The table/view 'db_weaving.dbo.AspNetUserRoles' does not have a pr
           </Key>
           <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="AspNetUserRoles">
-          <Key>
-            <PropertyRef Name="UserId" />
-            <PropertyRef Name="RoleId" />
-          </Key>
-          <Property Name="UserId" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" Type="String" />
-          <Property Name="RoleId" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" Type="String" />
         </EntityType>
         <EntityType Name="AspNetUsers">
           <Key>
@@ -200,34 +192,19 @@ warning 6002: The table/view 'db_weaving.dbo.AspNetUserRoles' does not have a pr
           <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
           <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="Modules">
+        <EntityType Name="BorderQuality">
           <Key>
-            <PropertyRef Name="module_id" />
+            <PropertyRef Name="borderQuality_id" />
           </Key>
-          <Property Name="module_id" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="module_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="module_icon" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="borderQuality_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="borderQuality1" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="Pages">
+        <EntityType Name="BorderSize">
           <Key>
-            <PropertyRef Name="page_id" />
+            <PropertyRef Name="borderSize_id" />
           </Key>
-          <Property Name="page_id" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="page_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="page_link" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="module_id" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="PagePermission">
-          <Key>
-            <PropertyRef Name="PermissionId" />
-          </Key>
-          <Property Name="PermissionId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="RoleId" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="PageId" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="EditPermission" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="viewPermission" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="DelPermission" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="AddPermission" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="borderSize_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="borderSize1" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="employeeDesignation">
           <Key>
@@ -271,6 +248,23 @@ warning 6002: The table/view 'db_weaving.dbo.AspNetUserRoles' does not have a pr
           <Property Name="drawBox" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="jacquard" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="Modules">
+          <Key>
+            <PropertyRef Name="module_id" />
+          </Key>
+          <Property Name="module_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="module_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="module_icon" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Pages">
+          <Key>
+            <PropertyRef Name="page_id" />
+          </Key>
+          <Property Name="page_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="page_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="page_link" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="module_id" Type="Int32" />
+        </EntityType>
         <EntityType Name="weavingUnit">
           <Key>
             <PropertyRef Name="weavingUnit_id" />
@@ -278,19 +272,25 @@ warning 6002: The table/view 'db_weaving.dbo.AspNetUserRoles' does not have a pr
           <Property Name="weavingUnit_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="weavingUnitName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="BorderQuality">
+        <EntityType Name="AspNetUserRoles">
           <Key>
-            <PropertyRef Name="borderQuality_id" />
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="RoleId" />
           </Key>
-          <Property Name="borderQuality_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="borderQuality1" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="RoleId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="BorderSize">
+        <EntityType Name="PagePermission">
           <Key>
-            <PropertyRef Name="borderSize_id" />
+            <PropertyRef Name="PermissionId" />
           </Key>
-          <Property Name="borderSize_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="borderSize1" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="PermissionId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="RoleId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="PageId" Type="Int32" />
+          <Property Name="EditPermission" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="viewPermission" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="DelPermission" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="AddPermission" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -303,14 +303,6 @@ warning 6002: The table/view 'db_weaving.dbo.AspNetUserRoles' does not have a pr
               <MappingFragment StoreEntitySet="AspNetRoles">
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AspNetUserRoles">
-            <EntityTypeMapping TypeName="db_weavingModel.AspNetUserRoles">
-              <MappingFragment StoreEntitySet="AspNetUserRoles">
-                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -332,35 +324,19 @@ warning 6002: The table/view 'db_weaving.dbo.AspNetUserRoles' does not have a pr
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Modules">
-            <EntityTypeMapping TypeName="db_weavingModel.Modules">
-              <MappingFragment StoreEntitySet="Modules">
-                <ScalarProperty Name="module_icon" ColumnName="module_icon" />
-                <ScalarProperty Name="module_name" ColumnName="module_name" />
-                <ScalarProperty Name="module_id" ColumnName="module_id" />
+          <EntitySetMapping Name="BorderQuality">
+            <EntityTypeMapping TypeName="db_weavingModel.BorderQuality">
+              <MappingFragment StoreEntitySet="BorderQuality">
+                <ScalarProperty Name="borderQuality1" ColumnName="borderQuality" />
+                <ScalarProperty Name="borderQuality_id" ColumnName="borderQuality_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Pages">
-            <EntityTypeMapping TypeName="db_weavingModel.Pages">
-              <MappingFragment StoreEntitySet="Pages">
-                <ScalarProperty Name="module_id" ColumnName="module_id" />
-                <ScalarProperty Name="page_link" ColumnName="page_link" />
-                <ScalarProperty Name="page_name" ColumnName="page_name" />
-                <ScalarProperty Name="page_id" ColumnName="page_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PagePermission">
-            <EntityTypeMapping TypeName="db_weavingModel.PagePermission">
-              <MappingFragment StoreEntitySet="PagePermission">
-                <ScalarProperty Name="AddPermission" ColumnName="AddPermission" />
-                <ScalarProperty Name="DelPermission" ColumnName="DelPermission" />
-                <ScalarProperty Name="viewPermission" ColumnName="viewPermission" />
-                <ScalarProperty Name="EditPermission" ColumnName="EditPermission" />
-                <ScalarProperty Name="PageId" ColumnName="PageId" />
-                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
-                <ScalarProperty Name="PermissionId" ColumnName="PermissionId" />
+          <EntitySetMapping Name="BorderSize">
+            <EntityTypeMapping TypeName="db_weavingModel.BorderSize">
+              <MappingFragment StoreEntitySet="BorderSize">
+                <ScalarProperty Name="borderSize1" ColumnName="borderSize" />
+                <ScalarProperty Name="borderSize_id" ColumnName="borderSize_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -409,6 +385,25 @@ warning 6002: The table/view 'db_weaving.dbo.AspNetUserRoles' does not have a pr
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Modules">
+            <EntityTypeMapping TypeName="db_weavingModel.Modules">
+              <MappingFragment StoreEntitySet="Modules">
+                <ScalarProperty Name="module_icon" ColumnName="module_icon" />
+                <ScalarProperty Name="module_name" ColumnName="module_name" />
+                <ScalarProperty Name="module_id" ColumnName="module_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pages">
+            <EntityTypeMapping TypeName="db_weavingModel.Pages">
+              <MappingFragment StoreEntitySet="Pages">
+                <ScalarProperty Name="module_id" ColumnName="module_id" />
+                <ScalarProperty Name="page_link" ColumnName="page_link" />
+                <ScalarProperty Name="page_name" ColumnName="page_name" />
+                <ScalarProperty Name="page_id" ColumnName="page_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="weavingUnit">
             <EntityTypeMapping TypeName="db_weavingModel.weavingUnit">
               <MappingFragment StoreEntitySet="weavingUnit">
@@ -417,19 +412,24 @@ warning 6002: The table/view 'db_weaving.dbo.AspNetUserRoles' does not have a pr
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="BorderQuality">
-            <EntityTypeMapping TypeName="db_weavingModel.BorderQuality">
-              <MappingFragment StoreEntitySet="BorderQuality">
-                <ScalarProperty Name="borderQuality1" ColumnName="borderQuality" />
-                <ScalarProperty Name="borderQuality_id" ColumnName="borderQuality_id" />
+          <EntitySetMapping Name="AspNetUserRoles">
+            <EntityTypeMapping TypeName="db_weavingModel.AspNetUserRoles">
+              <MappingFragment StoreEntitySet="AspNetUserRoles">
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="BorderSize">
-            <EntityTypeMapping TypeName="db_weavingModel.BorderSize">
-              <MappingFragment StoreEntitySet="BorderSize">
-                <ScalarProperty Name="borderSize1" ColumnName="borderSize" />
-                <ScalarProperty Name="borderSize_id" ColumnName="borderSize_id" />
+          <EntitySetMapping Name="PagePermission">
+            <EntityTypeMapping TypeName="db_weavingModel.PagePermission">
+              <MappingFragment StoreEntitySet="PagePermission">
+                <ScalarProperty Name="AddPermission" ColumnName="AddPermission" />
+                <ScalarProperty Name="DelPermission" ColumnName="DelPermission" />
+                <ScalarProperty Name="viewPermission" ColumnName="viewPermission" />
+                <ScalarProperty Name="EditPermission" ColumnName="EditPermission" />
+                <ScalarProperty Name="PageId" ColumnName="PageId" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="PermissionId" ColumnName="PermissionId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

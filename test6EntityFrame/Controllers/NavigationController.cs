@@ -12,10 +12,10 @@ namespace test6EntityFrame.Controllers
     public class NavigationController : ApiController
     {
         private db_weavingEntities db = new db_weavingEntities();
-        // GET: api/Navigation
+
         [Authorize]
         [Route("api/navigation")]
-        public IHttpActionResult Get()
+        public HttpResponseMessage Get()
         {
             var identity = (ClaimsIdentity)User.Identity;
             var LogIn = (identity.Claims
@@ -27,73 +27,35 @@ namespace test6EntityFrame.Controllers
             //var Email = (identity.Claims
             //     .FirstOrDefault(c => c.Type == ClaimTypes.Email).Value);
             var RoleID = from roleTable in db.AspNetUserRoles
-                         where roleTable.UserId == LogIn  select roleTable.RoleId;
-
-            //var navigationResult = from moduleRow in db.Modules
-            //                       select new
-            //                       {
-            //                           moduleRow.module_name,
-            //                           moduleRow.module_id,
-            //                           pages = (from PageTable in db.Pages
-            //                                    join PrTable in db.PagePermission on PageTable.page_id equals PrTable.PageId
-            //                                    where PrTable.RoleId == RoleID.FirstOrDefault() && PageTable.module_id == moduleRow.module_id
-            //                                    select new
-            //                                    {
-            //                                        pageName = PageTable.page_name,
-            //                                        pageID = PageTable.page_id,
-            //                                        pageURL = PageTable.page_link,
-            //                                        PageTable.page_id,
-            //                                        //---- Permission Against Role 
-            //                                        PrTable.AddPermission,
-            //                                        PrTable.DelPermission,
-            //                                        PrTable.EditPermission,
-            //                                        PrTable.viewPermission
-
-
-            //                                    })
-            //                       };
-
-
-
-
-            var finalResult = new
-            {
-                LoginName = LogIn,
-                RoleName = RoleName,
-                userName = Name,
-                navigationResult = from moduleRow in db.Modules
-                                   select new
-                                   {
-                                       moduleRow.module_name,
-                                       moduleRow.module_id,
-                                       moduleRow.module_icon,
-                                       pages = (from PageTable in db.Pages
-                                                join PrTable in db.PagePermission on PageTable.page_id equals PrTable.PageId
-                                                where PrTable.RoleId == RoleID.FirstOrDefault() && PageTable.module_id == moduleRow.module_id
+                         where roleTable.UserId == LogIn
+                         select roleTable.RoleId; var finalResult = new
+                         {
+                             LoginName = LogIn,
+                             RoleName = RoleName,
+                             userName = Name,
+                             navigationResult = from moduleRow in db.Modules
                                                 select new
                                                 {
-                                                    pageName = PageTable.page_name,
-                                                    pageID = PageTable.page_id,
-                                                    pageURL = PageTable.page_link,
-                                                    PageTable.page_id,
-                                                    //---- Permission Against Role 
-                                                    PrTable.AddPermission,
-                                                    PrTable.DelPermission,
-                                                    PrTable.EditPermission,
-                                                    PrTable.viewPermission
+                                                    moduleRow.module_name,
+                                                    moduleRow.module_id,
+                                                    moduleRow.module_icon,
+                                                    pages = (from PageTable in db.Pages
+                                                             join PrTable in db.PagePermission on PageTable.page_id equals PrTable.PageId
+                                                             where PrTable.RoleId == RoleID.FirstOrDefault() && PageTable.module_id == moduleRow.module_id
+                                                             select new
+                                                             {
+                                                                 pageName = PageTable.page_name,
+                                                                 pageId = PageTable.page_id,
+                                                                 pageURL = PageTable.page_link,
+                                                                 PrTable.AddPermission,
+                                                                 PrTable.DelPermission,
+                                                                 PrTable.EditPermission,
+                                                                 PrTable.viewPermission
+                                                             })
+                                                }
+                         };
 
-                                                })
-                                   }
-
-
-            };
-            return Ok(finalResult);
-        }
-
-        // GET: api/Navigation/5
-        public string Get(int id)
-        {
-            return "value";
+            return Request.CreateResponse(HttpStatusCode.OK, finalResult);
         }
 
 

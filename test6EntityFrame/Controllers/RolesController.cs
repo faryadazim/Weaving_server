@@ -11,76 +11,62 @@ using System.Web.Http.Description;
 using DAL;
 
 namespace test6EntityFrame.Controllers
-{    
+{
     public class RolesController : ApiController
     {
         private db_weavingEntities db = new db_weavingEntities();
 
         // GET: api/Roles
-        public IQueryable<AspNetRoles> GetAspNetRoles()
+        [Route("api/Roles")]
+        public HttpResponseMessage GetAspNetRoles()
         {
-            return db.AspNetRoles;
+            return Request.CreateResponse(HttpStatusCode.OK, db.AspNetRoles);
         }
 
-        // GET: api/Roles/5
-        [ResponseType(typeof(AspNetRoles))]
-        public IHttpActionResult GetAspNetRoles(string id)
+        [Route("api/RolesById")]
+        public HttpResponseMessage GetAspNetRolesById(string id)
         {
-            AspNetRoles aspNetRoles = db.AspNetRoles.Find(id);
-            if (aspNetRoles == null)
+            AspNetRoles enitity = db.AspNetRoles.Find(id);
+            if (enitity == null)
             {
-                return NotFound();
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Record not Found");
             }
 
-            return Ok(aspNetRoles);
+            return Request.CreateResponse(HttpStatusCode.OK, enitity);
         }
 
         // PUT: api/Roles/5
-        [ResponseType(typeof(void))]
-        public IHttpActionResult PutAspNetRoles(string id, string roleName)
+        [Route("api/Roles")]
+        public HttpResponseMessage PutAspNetRoles(string id, string roleName)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+
 
             var entity = db.AspNetRoles.FirstOrDefault(e => e.Id == id);
-            if(entity == null)
+            if (entity == null)
             {
-                return NotFound();
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Record not Found");
             }
             else
             {
                 entity.Name = roleName;
             }
-            
+
             try
             {
                 db.SaveChanges();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (!AspNetRolesExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
             }
 
-            return StatusCode(HttpStatusCode.NoContent);
+            return Request.CreateResponse(HttpStatusCode.OK, entity);
         }
 
-        // POST: api/Roles 
-        public IHttpActionResult PostAspNetRoles(string InputPageName)
+        [Route("api/Roles")]
+        public HttpResponseMessage PostAspNetRoles(string InputPageName)
         {
             var CustomId = Guid.NewGuid().ToString("N");
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
 
             var newRole = new AspNetRoles()
             {
@@ -89,22 +75,17 @@ namespace test6EntityFrame.Controllers
 
             };
             db.AspNetRoles.Add(newRole);
-            // if we create any pages it permission will be assign to  all Role but what if
-            //we create a new Role --- after that  new pages permission will bew assigned but wha about old pages
 
-            //solution ---
-            //bring list opf all table ;
-            //add these table to that New Role
-            //var ListOfRole = (from dataTAble in db.AspNetRoles select dataTAble.Id);
+
             var ListOfPages = from dataTable in db.Pages select dataTable.page_id;
-            foreach (string ch in ListOfPages)
+            foreach (int ch in ListOfPages)
             {
+                var CustomIdPermission = Guid.NewGuid().ToString("N");
 
-                var customIdFor = Guid.NewGuid().ToString("P");
                 var newPAgePermission = new PagePermission()
                 {
-                    PermissionId = customIdFor,
 
+                    PermissionId = CustomIdPermission,
                     RoleId = CustomId,
                     PageId = ch,
                     EditPermission = "false",
@@ -115,78 +96,49 @@ namespace test6EntityFrame.Controllers
                 db.PagePermission.Add(newPAgePermission);
 
             }
-           
+
 
             try
             {
                 db.SaveChanges();
             }
-            catch (DbUpdateException)
+            catch (Exception ex)
             {
-                //if (AspNetRolesExists(aspNetRoles.Id))
-                //{
-                //    return Conflict();
-                //}
-                //else
-                //{
-                //    throw;
-                //}
-                return NotFound();
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
             }
 
-            return Ok();
+            return Request.CreateResponse(HttpStatusCode.OK, newRole);
         }
 
-        // DELETE: api/Roles/5
-        [ResponseType(typeof(AspNetRoles))]
-        public IHttpActionResult DeleteAspNetRoles(string id)
+        [Route("api/Roles")]
+        public HttpResponseMessage DeleteAspNetRoles(string id)
         {
             AspNetRoles aspNetRoles = db.AspNetRoles.Find(id);
             if (aspNetRoles == null)
             {
-                return NotFound();
+
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Record not Found");
             }
 
             db.AspNetRoles.Remove(aspNetRoles);
 
             var permissionIds = from prTable in db.PagePermission where prTable.RoleId == id select prTable.PermissionId;
-
-
-
-
- 
-
             foreach (string ch in permissionIds)
             {
-                 
+
                 PagePermission prPermission = db.PagePermission.Find(ch);
                 if (prPermission == null)
                 {
-                    return NotFound();
+
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Record not Found");
                 }
 
                 db.PagePermission.Remove(prPermission);
-
-
-                
-
             }
- db.SaveChanges();
-            return Ok(aspNetRoles);
+            db.SaveChanges();
+            return Request.CreateResponse(HttpStatusCode.OK, aspNetRoles);
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
 
-        private bool AspNetRolesExists(string id)
-        {
-            return db.AspNetRoles.Count(e => e.Id == id) > 0;
-        }
     }
 }
