@@ -15,74 +15,127 @@ namespace test6EntityFrame.Controllers
     public class ModulesController : ApiController
     {
         private db_weavingEntities db = new db_weavingEntities();
-        [Route("api/Modules")]
-        public HttpResponseMessage GetModules()
-        {
-            return Request.CreateResponse(HttpStatusCode.OK, db.Modules);
 
-        }
-        [Route("api/ModulesById")]
-        public HttpResponseMessage GetModulesById(int id)
+        // GET: api/Modules
+        public IQueryable<Modules> GetModules()
         {
-            Modules entity = db.Modules.Find(id);
-            if (entity == null)
+            return db.Modules;
+        }
+
+        // GET: api/Modules/5
+        [ResponseType(typeof(Modules))]
+        public IHttpActionResult GetModules(string id)
+        {
+            Modules modules = db.Modules.Find(id);
+            if (modules == null)
             {
-
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Record not Found");
+                return NotFound();
             }
-            return Request.CreateResponse(HttpStatusCode.OK, entity);
+
+            return Ok(modules);
         }
 
-        [Route("api/Modules")]
-        public HttpResponseMessage PutModules(Modules modules)
+        // PUT: api/Modules/5
+        [ResponseType(typeof(void))]
+        public IHttpActionResult PutModules(Modules modules)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+         
+
             db.Entry(modules).State = EntityState.Modified;
 
             try
             {
                 db.SaveChanges();
             }
-            catch (Exception ex)
+            catch (DbUpdateConcurrencyException)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+                if (!ModulesExists(modules.module_id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
             }
-            return Request.CreateResponse(HttpStatusCode.OK, modules);
+
+            return StatusCode(HttpStatusCode.NoContent);
         }
 
-        [Route("api/Modules")]
-        public HttpResponseMessage PostModules(Modules modules)
+        // POST: api/Modules
+        [ResponseType(typeof(Modules))]
+        public IHttpActionResult PostModules( Modules modules)
         {
+            //            public string module_id { get; set; }
+            //public string module_name { get; set; }
+            //public string module_icon { get; set; }
+            var customId = Guid.NewGuid().ToString("N");
+            var newModule = new Modules()
+            {
+                module_id = customId,
+                module_name = modules.module_name,
+                module_icon = modules.module_icon
+
+            };
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            db.Modules.Add(newModule);
 
             try
             {
-                db.Modules.Add(modules);
                 db.SaveChanges();
-
-                var message = Request.CreateResponse(HttpStatusCode.Created, modules);
-                message.Headers.Location = new Uri(Request.RequestUri + modules.module_id.ToString());
-                return message;
             }
-            catch (Exception ex)
+            catch (DbUpdateException)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+                if (ModulesExists(modules.module_id))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
             }
 
+            return CreatedAtRoute("DefaultApi", new { id =customId }, newModule);
         }
 
-        [Route("api/Modules")]
-        public HttpResponseMessage DeleteModules(int id)
+        // DELETE: api/Modules/5
+        [ResponseType(typeof(Modules))]
+        public IHttpActionResult DeleteModules(string id)
         {
-            Modules entity = db.Modules.Find(id);
-            if (entity == null)
+            Modules modules = db.Modules.Find(id);
+            if (modules == null)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Record not Found");
+                return NotFound();
             }
 
-            db.Modules.Remove(entity);
+            db.Modules.Remove(modules);
             db.SaveChanges();
 
-            return Request.CreateResponse(HttpStatusCode.OK, entity);
+            return Ok(modules);
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        private bool ModulesExists(string id)
+        {
+            return db.Modules.Count(e => e.module_id == id) > 0;
+        }
     }
 }

@@ -17,93 +17,102 @@ namespace test6EntityFrame.Controllers
         private db_weavingEntities db = new db_weavingEntities();
 
         // GET: api/weavingUnits
-        public HttpResponseMessage GetweavingUnit()
+        public IQueryable<weavingUnit> GetweavingUnit()
         {
-
-            return Request.CreateResponse(HttpStatusCode.OK, db.weavingUnit);
+            return db.weavingUnit;
         }
 
         // GET: api/weavingUnits/5
         [ResponseType(typeof(weavingUnit))]
-        public HttpResponseMessage GetweavingUnit(int id)
+        public IHttpActionResult GetweavingUnit(int id)
         {
-            weavingUnit entity = db.weavingUnit.Find(id);
-            if (entity == null)
+            weavingUnit weavingUnit = db.weavingUnit.Find(id);
+            if (weavingUnit == null)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Record Not Found");
+                return NotFound();
             }
-            return Request.CreateResponse(HttpStatusCode.OK, entity);
+
+            return Ok(weavingUnit);
         }
 
         // PUT: api/weavingUnits/5
         [ResponseType(typeof(void))]
-        public HttpResponseMessage PutweavingUnit(weavingUnit weavingUnit)
+        public IHttpActionResult PutweavingUnit(int id, weavingUnit weavingUnit)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
+            if (id != weavingUnit.weavingUnit_id)
+            {
+                return BadRequest();
+            }
+
+            db.Entry(weavingUnit).State = EntityState.Modified;
 
             try
             {
-                using (db_weavingEntities db = new db_weavingEntities())
+                db.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!weavingUnitExists(id))
                 {
-                    var entity = db.weavingUnit.FirstOrDefault(e => e.weavingUnit_id == weavingUnit.weavingUnit_id);
-                    if (entity == null)
-                    {
-                        return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Record not Found");
-                    }
-                    else
-                    {
-                        entity.weavingUnit_id = weavingUnit.weavingUnit_id;
-                        entity.weavingUnitName = weavingUnit.weavingUnitName; //here quality1 mean quality name
-                        db.SaveChanges();
-                        return Request.CreateResponse(HttpStatusCode.OK, entity);
-
-                    }
-
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
                 }
             }
-            catch (Exception ex)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
-            }
 
+            return StatusCode(HttpStatusCode.NoContent);
         }
 
         // POST: api/weavingUnits
         [ResponseType(typeof(weavingUnit))]
-        public HttpResponseMessage PostweavingUnit(weavingUnit weavingUnitForPost)
+        public IHttpActionResult PostweavingUnit(weavingUnit weavingUnit)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                db.weavingUnit.Add(weavingUnitForPost);
-                db.SaveChanges();
-
-                var message = Request.CreateResponse(HttpStatusCode.Created, weavingUnitForPost);
-                message.Headers.Location = new Uri(Request.RequestUri + weavingUnitForPost.weavingUnit_id.ToString());
-                return message;
-            }
-            catch (Exception ex)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+                return BadRequest(ModelState);
             }
 
+            db.weavingUnit.Add(weavingUnit);
+            db.SaveChanges();
+
+            return CreatedAtRoute("DefaultApi", new { id = weavingUnit.weavingUnit_id }, weavingUnit);
         }
 
         // DELETE: api/weavingUnits/5
         [ResponseType(typeof(weavingUnit))]
-        public HttpResponseMessage DeleteweavingUnit(int id)
+        public IHttpActionResult DeleteweavingUnit(int id)
         {
-
-            weavingUnit entity = db.weavingUnit.Find(id);
-            if (entity == null)
+            weavingUnit weavingUnit = db.weavingUnit.Find(id);
+            if (weavingUnit == null)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Record not Found");
+                return NotFound();
             }
 
-            db.weavingUnit.Remove(entity);
+            db.weavingUnit.Remove(weavingUnit);
             db.SaveChanges();
 
-            return Request.CreateResponse(HttpStatusCode.OK, entity);
+            return Ok(weavingUnit);
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        private bool weavingUnitExists(int id)
+        {
+            return db.weavingUnit.Count(e => e.weavingUnit_id == id) > 0;
+        }
     }
 }

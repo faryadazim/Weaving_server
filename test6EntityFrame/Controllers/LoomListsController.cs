@@ -21,7 +21,50 @@ namespace test6EntityFrame.Controllers
         [Route("api/LoomLists")]
         public HttpResponseMessage GetLoomList()
         {
-            return Request.CreateResponse(HttpStatusCode.OK, db.LoomList);
+
+
+            var joinGroup = from weavingUnitRow in db.weavingUnit
+                                   select new
+                                   {
+                                       weavingUnitRow.weavingUnit_id,
+                                       weavingUnitRow.weavingUnitName,
+                                       loomsList = from loomTable in db.LoomList where loomTable.weavingUnitId == weavingUnitRow.weavingUnit_id
+                                                   select new
+                                                   {
+                                                       loomTable.loom_id,
+                                                       loomTable.loomSize,
+                                                       loomTable.jacquard,
+                                                       loomTable.drawBox,
+                                                       loomTable.loomNumber,
+
+                                                   }
+                                   };
+
+
+
+
+
+
+            return Request.CreateResponse(HttpStatusCode.OK, joinGroup);
+
+
+
+            //(from PageTable in db.Pages
+            // join PrTable in db.PagePermission on PageTable.page_id equals PrTable.PageId
+            // where PrTable.RoleId == RoleID.FirstOrDefault() && PageTable.module_id == moduleRow.module_id
+            // select new
+            // {
+            //     pageName = PageTable.page_name,
+            //     pageID = PageTable.page_id,
+            //     pageURL = PageTable.page_link,
+            //     PageTable.page_id,
+            //     //---- Permission Against Role 
+            //     PrTable.AddPermission,
+            //     PrTable.DelPermission,
+            //     PrTable.EditPermission,
+            //     PrTable.viewPermission
+
+            // })
         }
 
 
@@ -62,6 +105,7 @@ namespace test6EntityFrame.Controllers
                         entity.loomNumber = loomList.loomNumber;
                         entity.jacquard = loomList.jacquard;
                         entity.drawBox = loomList.drawBox;
+                        entity.weavingUnitId = loomList.weavingUnitId;
                         db.SaveChanges();
                         return Request.CreateResponse(HttpStatusCode.OK, entity);
                     }

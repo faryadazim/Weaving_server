@@ -16,8 +16,8 @@ namespace test6EntityFrame.Controllers
     {
         private db_weavingEntities db = new db_weavingEntities();
 
-        [Route("api/Pages")]
-        public HttpResponseMessage GetPages()
+        // GET: api/Pages
+        public IHttpActionResult GetPages()
         {
             var joinGroup = (
                 from pagesTable in db.Pages
@@ -33,30 +33,32 @@ namespace test6EntityFrame.Controllers
                     module = modulesTable.module_name
                 });
 
-            return Request.CreateResponse(HttpStatusCode.OK, joinGroup);
+            return Ok(joinGroup);
         }
 
-        [Route("api/PagesById")]
-        public HttpResponseMessage GetPagesById(int id)
+        // GET: api/Pages/5
+        [ResponseType(typeof(Pages))]
+        public IHttpActionResult GetPages(string id)
         {
             Pages pages = db.Pages.Find(id);
             if (pages == null)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Record Not Found");
+                return NotFound();
             }
 
-            return Request.CreateResponse(HttpStatusCode.OK, pages);
+            return Ok(pages);
         }
 
-        [Route("api/Pages")]
-        public HttpResponseMessage PutPages(Pages pages)
+        // PUT: api/Pages/5
+        [ResponseType(typeof(void))]
+        public IHttpActionResult PutPages( Pages pages)
         {
-
-            var entity = db.Pages.FirstOrDefault(e => e.page_id == pages.page_id);
-            if (entity == null)
+            if (!ModelState.IsValid)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Record not Found");
+                return BadRequest(ModelState);
             }
+
+           
 
             db.Entry(pages).State = EntityState.Modified;
 
@@ -64,67 +66,109 @@ namespace test6EntityFrame.Controllers
             {
                 db.SaveChanges();
             }
-            catch (Exception ex)
+            catch (DbUpdateConcurrencyException)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+                if (!PagesExists(pages.page_id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
             }
 
-            return Request.CreateResponse(HttpStatusCode.OK, pages);
+            return StatusCode(HttpStatusCode.NoContent);
         }
 
-        [Route("api/Pages")]
-        public HttpResponseMessage PostPages(Pages pages)
+        // POST: api/Pages
+        [ResponseType(typeof(Pages))]
+        public IHttpActionResult PostPages(Pages pages)
         {
+
+            var customId = Guid.NewGuid().ToString("N");
+            var newPages = new Pages()
+            {
+                page_id = customId,
+                page_name =  pages.page_name,
+                page_link =pages.page_link ,
+            module_id = pages.module_id
+            };
+
+            db.Pages.Add(newPages);
+            var ListOfRole = (from dataTAble in db.AspNetRoles select dataTAble.Id);
+
+            
+
+            foreach (string ch in ListOfRole)
+            {
+
+                var customIdFor = Guid.NewGuid().ToString("P");
+                var newPAgePermission = new PagePermission()
+                {
+                       PermissionId  = customIdFor,
+
+        RoleId = ch,
+                    PageId = customId,
+                    EditPermission = "false",
+                    viewPermission = "false",
+                    DelPermission = "false",
+                    AddPermission = "false"
+                };
+                db.PagePermission.Add(newPAgePermission);
+               
+            }
+
+
+  
 
             try
             {
-                db.Pages.Add(pages);
                 db.SaveChanges();
-
-                var ListOfRole = (from dataTAble in db.AspNetRoles select dataTAble.Id);
-
-                foreach (string ch in ListOfRole)
-                {
-
-                    var customIdFor = Guid.NewGuid().ToString("P");
-                    var newPAgePermission = new PagePermission()
-                    {
-
-                        PermissionId = customIdFor,
-                        RoleId = ch,
-                        PageId = pages.page_id,
-                        EditPermission = "false",
-                        viewPermission = "false",
-                        DelPermission = "false",
-                        AddPermission = "false"
-                    };
-                    db.PagePermission.Add(newPAgePermission);
-
-                }
-                db.SaveChanges();
-                var message = Request.CreateResponse(HttpStatusCode.Created, pages);
-                message.Headers.Location = new Uri(Request.RequestUri + pages.page_id.ToString());
-                return message;
             }
-            catch (Exception ex)
+            catch (DbUpdateException)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+                if (PagesExists(customId))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
             }
+
+            return Ok(newPages);
         }
 
-        [Route("api/Pages")]
-        public HttpResponseMessage DeletePages(int id)
+        // DELETE: api/Pages/5
+        [ResponseType(typeof(Pages))]
+        public IHttpActionResult DeletePages(string id)
         {
-            Pages entity = db.Pages.Find(id);
-            if (entity == null)
+            Pages pages = db.Pages.Find(id);
+            if (pages == null)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Record not Found");
+                return NotFound();
             }
 
-            db.Pages.Remove(entity);
+            db.Pages.Remove(pages);
             db.SaveChanges();
 
-            return Request.CreateResponse(HttpStatusCode.OK, entity);
+            return Ok(pages);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        private bool PagesExists(string id)
+        {
+            return db.Pages.Count(e => e.page_id == id) > 0;
         }
     }
 }

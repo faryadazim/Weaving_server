@@ -86,6 +86,9 @@
     <Compile Include="employeeList.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="grayProductList.cs">
+      <DependentUpon>DataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="LoomList.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>

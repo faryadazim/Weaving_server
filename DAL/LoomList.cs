@@ -19,5 +19,6 @@ namespace DAL
         public string loomSize { get; set; }
         public string drawBox { get; set; }
         public string jacquard { get; set; }
+        public Nullable<int> weavingUnitId { get; set; }
     }
 }

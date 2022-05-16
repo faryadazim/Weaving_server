@@ -79,6 +79,16 @@ namespace test6EntityFrame.Controllers
             }
         }
 
+        [Route ("api/employeeListsName")]
+        public HttpResponseMessage GetEmployeeListName()
+        {
+            var employeeList = from employeeTable in db.employeeList select new { employeeTable.name, employeeTable.employee_Id};
+
+            return Request.CreateResponse(HttpStatusCode.OK, employeeList);
+        }
+
+
+
         [Route("api/employeeLists")]
         public HttpResponseMessage PostemployeeList(employeeList employeeListForPost)
         {
