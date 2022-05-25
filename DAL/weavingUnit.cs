@@ -16,5 +16,6 @@ namespace DAL
     {
         public int weavingUnit_id { get; set; }
         public string weavingUnitName { get; set; }
+        public string weavingUnitShortCode { get; set; }
     }
 }

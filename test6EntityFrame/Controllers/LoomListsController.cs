@@ -16,7 +16,7 @@ namespace test6EntityFrame.Controllers
     {
         private db_weavingEntities db = new db_weavingEntities();
 
-        
+
 
         [Route("api/LoomLists")]
         public HttpResponseMessage GetLoomList()
@@ -24,21 +24,22 @@ namespace test6EntityFrame.Controllers
 
 
             var joinGroup = from weavingUnitRow in db.weavingUnit
-                                   select new
-                                   {
-                                       weavingUnitRow.weavingUnit_id,
-                                       weavingUnitRow.weavingUnitName,
-                                       loomsList = from loomTable in db.LoomList where loomTable.weavingUnitId == weavingUnitRow.weavingUnit_id
-                                                   select new
-                                                   {
-                                                       loomTable.loom_id,
-                                                       loomTable.loomSize,
-                                                       loomTable.jacquard,
-                                                       loomTable.drawBox,
-                                                       loomTable.loomNumber,
+                            select new
+                            {
+                                weavingUnitRow.weavingUnit_id,
+                                weavingUnitRow.weavingUnitName,
+                                loomsList = from loomTable in db.LoomList
+                                            where loomTable.weavingUnitId == weavingUnitRow.weavingUnit_id
+                                            select new
+                                            {
+                                                loomTable.loom_id,
+                                                loomTable.loomSize,
+                                                loomTable.jacquard,
+                                                loomTable.drawBox,
+                                                loomTable.loomNumber,
 
-                                                   }
-                                   };
+                                            }
+                            };
 
 
 
@@ -68,7 +69,11 @@ namespace test6EntityFrame.Controllers
         }
 
 
-
+        [Route("api/LoomListsCore")]
+        public HttpResponseMessage GetLoomListCore()
+        {
+            return Request.CreateResponse(HttpStatusCode.OK, db.LoomList);
+        }
 
 
         [Route("api/LoomListsById")]
@@ -84,7 +89,7 @@ namespace test6EntityFrame.Controllers
 
 
         [Route("api/LoomLists")]
-        public HttpResponseMessage PutLoomList( LoomList loomList)
+        public HttpResponseMessage PutLoomList(LoomList loomList)
         {
 
 
@@ -121,10 +126,44 @@ namespace test6EntityFrame.Controllers
         {
             try
             {
-                db.LoomList.Add(loomListForPost);
+                var lastLoomIdInThatPartiularWeavingUnit = from loomTable in db.LoomList
+                                                           where loomTable.weavingUnitId == loomListForPost.weavingUnitId
+                                                           orderby loomTable.loom_id descending
+                                                           select loomTable.loomNumber;
+                string newListLoom = lastLoomIdInThatPartiularWeavingUnit.FirstOrDefault();
+
+                int actualLoomNumber;
+                if (newListLoom == null)
+                {
+                    actualLoomNumber = 1;
+                }
+                else
+                {
+                    string[] numberTo = newListLoom.Split('-');
+                    actualLoomNumber = Int32.Parse(numberTo[2]) + 1;
+                }
+
+                var weavingUnitShortCode = from weavingUnitTable in
+                        db.weavingUnit
+                                           where weavingUnitTable.weavingUnit_id == loomListForPost.weavingUnitId
+                                           select weavingUnitTable.weavingUnitShortCode;
+
+
+                string GeneratedLoomNumber = "LN-" + weavingUnitShortCode.FirstOrDefault() + "-" + actualLoomNumber.ToString();
+                var newLoomListWithCustomLoomNumber = new LoomList()
+                {
+
+                    loomNumber = GeneratedLoomNumber,
+                    loomSize = loomListForPost.loomSize,
+                    drawBox = loomListForPost.drawBox,
+                    jacquard = loomListForPost.jacquard,
+                    weavingUnitId = loomListForPost.weavingUnitId
+
+                };
+                db.LoomList.Add(newLoomListWithCustomLoomNumber);
                 db.SaveChanges();
-                var message = Request.CreateResponse(HttpStatusCode.Created, loomListForPost);
-                message.Headers.Location = new Uri(Request.RequestUri + loomListForPost.loom_id.ToString());
+                var message = Request.CreateResponse(HttpStatusCode.Created, newLoomListWithCustomLoomNumber);
+                message.Headers.Location = new Uri(Request.RequestUri + newLoomListWithCustomLoomNumber.loom_id.ToString());
                 return message;
             }
             catch (Exception ex)
@@ -136,7 +175,7 @@ namespace test6EntityFrame.Controllers
         [Route("api/LoomLists")]
         public HttpResponseMessage DeleteLoomList(int id)
         {
-            LoomList entity = db.LoomList.Find(id); 
+            LoomList entity = db.LoomList.Find(id);
             if (entity == null)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Record not Found");
@@ -145,7 +184,5 @@ namespace test6EntityFrame.Controllers
             db.SaveChanges();
             return Request.CreateResponse(HttpStatusCode.OK, entity);
         }
-
-        
     }
 }

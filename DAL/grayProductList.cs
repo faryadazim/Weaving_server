@@ -15,15 +15,15 @@ namespace DAL
     public partial class grayProductList
     {
         public int grayProduct_id { get; set; }
-        public string itemName { get; set; }
-        public string itemSize { get; set; }
+        public Nullable<int> itemName { get; set; }
+        public Nullable<int> itemSize { get; set; }
         public string PerPieceGrayWeightGram { get; set; }
-        public string graySizeppLength { get; set; }
         public string graySizeppWidth { get; set; }
-        public Nullable<int> LoomNumbPieceInBorder76 { get; set; }
+        public string graySizeppLength { get; set; }
+        public string LoomNumbPieceInBorder76_ { get; set; }
         public string LoomNumbRatePerBorderWithDraw76 { get; set; }
         public string LoomNumbRatePerBorderWithoutDraw76 { get; set; }
-        public Nullable<int> LoomNumbPieceInBorder96 { get; set; }
+        public string LoomNumbPieceInBorder96 { get; set; }
         public string LoomNumbRatePerBorderWithDraw96 { get; set; }
         public string LoomNumbRatePerBorderWithoutDraw96 { get; set; }
         public string status { get; set; }

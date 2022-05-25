@@ -15,7 +15,7 @@ namespace DAL
     public partial class LoomList
     {
         public int loom_id { get; set; }
-        public Nullable<int> loomNumber { get; set; }
+        public string loomNumber { get; set; }
         public string loomSize { get; set; }
         public string drawBox { get; set; }
         public string jacquard { get; set; }

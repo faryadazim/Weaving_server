@@ -12,8 +12,6 @@
           <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="256" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'db_weaving.dbo.AspNetUserRoles' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="AspNetUserRoles">
           <Key>
             <PropertyRef Name="UserId" />
@@ -76,29 +74,29 @@ warning 6002: The table/view 'db_weaving.dbo.AspNetUserRoles' does not have a pr
           <Property Name="referenceName" Type="varchar(max)" />
           <Property Name="referencePhoneNum" Type="varchar(max)" />
           <Property Name="jobStatus" Type="varchar(max)" />
-          <Property Name="designation" Type="varchar(max)" />
+          <Property Name="designation" Type="int" Nullable="false" />
           <Property Name="employeePic1" Type="varchar(max)" />
           <Property Name="employeePic2" Type="varchar(max)" />
           <Property Name="employeeCnicFront" Type="varchar(max)" />
           <Property Name="employeeCnicBsck" Type="varchar(max)" />
           <Property Name="recruitmentType" Type="varchar(max)" />
-          <Property Name="weeklySalary" Type="varchar(max)" />
-          <Property Name="monthlySalary" Type="varchar(max)" />
+          <Property Name="weeklySalary" Type="int" />
+          <Property Name="monthlySalary" Type="int" />
         </EntityType>
         <EntityType Name="grayProductList">
           <Key>
             <PropertyRef Name="grayProduct_id" />
           </Key>
           <Property Name="grayProduct_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="itemName" Type="varchar(max)" />
-          <Property Name="itemSize" Type="varchar(max)" />
+          <Property Name="itemName" Type="int" />
+          <Property Name="itemSize" Type="int" />
           <Property Name="PerPieceGrayWeightGram" Type="varchar(max)" />
-          <Property Name="graySizeppLength" Type="varchar(max)" />
           <Property Name="graySizeppWidth" Type="varchar(max)" />
-          <Property Name="LoomNumbPieceInBorder76" Type="int" />
+          <Property Name="graySizeppLength" Type="varchar(max)" />
+          <Property Name="LoomNumbPieceInBorder76]" Type="varchar(max)" />
           <Property Name="LoomNumbRatePerBorderWithDraw76" Type="varchar(max)" />
           <Property Name="LoomNumbRatePerBorderWithoutDraw76" Type="varchar(max)" />
-          <Property Name="LoomNumbPieceInBorder96" Type="int" />
+          <Property Name="LoomNumbPieceInBorder96" Type="varchar(max)" />
           <Property Name="LoomNumbRatePerBorderWithDraw96" Type="varchar(max)" />
           <Property Name="LoomNumbRatePerBorderWithoutDraw96" Type="varchar(max)" />
           <Property Name="status" Type="varchar(max)" />
@@ -108,7 +106,7 @@ warning 6002: The table/view 'db_weaving.dbo.AspNetUserRoles' does not have a pr
             <PropertyRef Name="loom_id" />
           </Key>
           <Property Name="loom_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="loomNumber" Type="int" />
+          <Property Name="loomNumber" Type="varchar(max)" />
           <Property Name="loomSize" Type="varchar(max)" />
           <Property Name="drawBox" Type="varchar(max)" />
           <Property Name="jacquard" Type="varchar(max)" />
@@ -149,9 +147,11 @@ warning 6002: The table/view 'db_weaving.dbo.AspNetUserRoles' does not have a pr
           </Key>
           <Property Name="weavingUnit_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="weavingUnitName" Type="varchar(max)" />
+          <Property Name="weavingUnitShortCode" Type="varchar(max)" />
         </EntityType>
         <EntityContainer Name="db_weavingModelStoreContainer">
           <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BorderQuality" EntityType="Self.BorderQuality" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BorderSize" EntityType="Self.BorderSize" Schema="dbo" store:Type="Tables" />
@@ -163,12 +163,6 @@ warning 6002: The table/view 'db_weaving.dbo.AspNetUserRoles' does not have a pr
           <EntitySet Name="PagePermission" EntityType="Self.PagePermission" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Pages" EntityType="Self.Pages" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="weavingUnit" EntityType="Self.weavingUnit" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [AspNetUserRoles].[UserId] AS [UserId], 
-    [AspNetUserRoles].[RoleId] AS [RoleId]
-    FROM [dbo].[AspNetUserRoles] AS [AspNetUserRoles]</DefiningQuery>
-          </EntitySet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -180,21 +174,21 @@ warning 6002: The table/view 'db_weaving.dbo.AspNetUserRoles' does not have a pr
           <EntitySet Name="BorderQuality" EntityType="db_weavingModel.BorderQuality" />
           <EntitySet Name="BorderSize" EntityType="db_weavingModel.BorderSize" />
           <EntitySet Name="employeeDesignation" EntityType="db_weavingModel.employeeDesignation" />
-          <EntitySet Name="employeeList" EntityType="db_weavingModel.employeeList" />
           <EntitySet Name="Modules" EntityType="db_weavingModel.Modules" />
           <EntitySet Name="PagePermission" EntityType="db_weavingModel.PagePermission" />
           <EntitySet Name="Pages" EntityType="db_weavingModel.Pages" />
-          <EntitySet Name="weavingUnit" EntityType="db_weavingModel.weavingUnit" />
-          <EntitySet Name="AspNetUserRoles" EntityType="db_weavingModel.AspNetUserRoles" />
-          <EntitySet Name="LoomList" EntityType="db_weavingModel.LoomList" />
           <EntitySet Name="grayProductList" EntityType="db_weavingModel.grayProductList" />
+          <EntitySet Name="AspNetUserRoles" EntityType="db_weavingModel.AspNetUserRoles" />
+          <EntitySet Name="employeeList" EntityType="db_weavingModel.employeeList" />
+          <EntitySet Name="weavingUnit" EntityType="db_weavingModel.weavingUnit" />
+          <EntitySet Name="LoomList" EntityType="db_weavingModel.LoomList" />
         </EntityContainer>
         <EntityType Name="AspNetRoles">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Id" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="Name" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" Type="String" />
         </EntityType>
         <EntityType Name="AspNetUsers">
           <Key>
@@ -234,31 +228,6 @@ warning 6002: The table/view 'db_weaving.dbo.AspNetUserRoles' does not have a pr
           <Property Name="designation_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="designationName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="employeeList">
-          <Key>
-            <PropertyRef Name="employee_Id" />
-          </Key>
-          <Property Name="employee_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="fatherName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="phoneNum1" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="phoneNum2" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="phoneNum3" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="homePhoneNum" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="cnicNum" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="address" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="referenceName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="referencePhoneNum" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="jobStatus" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="designation" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="employeePic1" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="employeePic2" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="employeeCnicFront" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="employeeCnicBsck" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="recruitmentType" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="weeklySalary" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="monthlySalary" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-        </EntityType>
         <EntityType Name="Modules">
           <Key>
             <PropertyRef Name="module_id" />
@@ -288,12 +257,23 @@ warning 6002: The table/view 'db_weaving.dbo.AspNetUserRoles' does not have a pr
           <Property Name="page_link" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="module_id" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="weavingUnit">
+        <EntityType Name="grayProductList">
           <Key>
-            <PropertyRef Name="weavingUnit_id" />
+            <PropertyRef Name="grayProduct_id" />
           </Key>
-          <Property Name="weavingUnit_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="weavingUnitName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="grayProduct_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="itemName" Type="Int32" />
+          <Property Name="itemSize" Type="Int32" />
+          <Property Name="PerPieceGrayWeightGram" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="graySizeppWidth" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="graySizeppLength" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="LoomNumbPieceInBorder76_" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="LoomNumbRatePerBorderWithDraw76" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="LoomNumbRatePerBorderWithoutDraw76" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="LoomNumbPieceInBorder96" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="LoomNumbRatePerBorderWithDraw96" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="LoomNumbRatePerBorderWithoutDraw96" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="AspNetUserRoles">
           <Key>
@@ -303,34 +283,49 @@ warning 6002: The table/view 'db_weaving.dbo.AspNetUserRoles' does not have a pr
           <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="RoleId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="employeeList">
+          <Key>
+            <PropertyRef Name="employee_Id" />
+          </Key>
+          <Property Name="employee_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="fatherName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="phoneNum1" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="phoneNum2" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="phoneNum3" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="homePhoneNum" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="cnicNum" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="address" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="referenceName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="referencePhoneNum" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="jobStatus" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="designation" Type="Int32" Nullable="false" />
+          <Property Name="employeePic1" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="employeePic2" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="employeeCnicFront" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="employeeCnicBsck" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="recruitmentType" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="weeklySalary" Type="Int32" />
+          <Property Name="monthlySalary" Type="Int32" />
+        </EntityType>
+        <EntityType Name="weavingUnit">
+          <Key>
+            <PropertyRef Name="weavingUnit_id" />
+          </Key>
+          <Property Name="weavingUnit_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="weavingUnitName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="weavingUnitShortCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
         <EntityType Name="LoomList">
           <Key>
             <PropertyRef Name="loom_id" />
           </Key>
           <Property Name="loom_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="loomNumber" Type="Int32" />
+          <Property Name="loomNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="loomSize" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="drawBox" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="jacquard" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="weavingUnitId" Type="Int32" />
-        </EntityType>
-        <EntityType Name="grayProductList">
-          <Key>
-            <PropertyRef Name="grayProduct_id" />
-          </Key>
-          <Property Name="grayProduct_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="itemName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="itemSize" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="PerPieceGrayWeightGram" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="graySizeppLength" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="graySizeppWidth" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="LoomNumbPieceInBorder76" Type="Int32" />
-          <Property Name="LoomNumbRatePerBorderWithDraw76" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="LoomNumbRatePerBorderWithoutDraw76" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="LoomNumbPieceInBorder96" Type="Int32" />
-          <Property Name="LoomNumbRatePerBorderWithDraw96" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="LoomNumbRatePerBorderWithoutDraw96" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="status" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -388,32 +383,6 @@ warning 6002: The table/view 'db_weaving.dbo.AspNetUserRoles' does not have a pr
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="employeeList">
-            <EntityTypeMapping TypeName="db_weavingModel.employeeList">
-              <MappingFragment StoreEntitySet="employeeList">
-                <ScalarProperty Name="monthlySalary" ColumnName="monthlySalary" />
-                <ScalarProperty Name="weeklySalary" ColumnName="weeklySalary" />
-                <ScalarProperty Name="recruitmentType" ColumnName="recruitmentType" />
-                <ScalarProperty Name="employeeCnicBsck" ColumnName="employeeCnicBsck" />
-                <ScalarProperty Name="employeeCnicFront" ColumnName="employeeCnicFront" />
-                <ScalarProperty Name="employeePic2" ColumnName="employeePic2" />
-                <ScalarProperty Name="employeePic1" ColumnName="employeePic1" />
-                <ScalarProperty Name="designation" ColumnName="designation" />
-                <ScalarProperty Name="jobStatus" ColumnName="jobStatus" />
-                <ScalarProperty Name="referencePhoneNum" ColumnName="referencePhoneNum" />
-                <ScalarProperty Name="referenceName" ColumnName="referenceName" />
-                <ScalarProperty Name="address" ColumnName="address" />
-                <ScalarProperty Name="cnicNum" ColumnName="cnicNum" />
-                <ScalarProperty Name="homePhoneNum" ColumnName="homePhoneNum" />
-                <ScalarProperty Name="phoneNum3" ColumnName="phoneNum3" />
-                <ScalarProperty Name="phoneNum2" ColumnName="phoneNum2" />
-                <ScalarProperty Name="phoneNum1" ColumnName="phoneNum1" />
-                <ScalarProperty Name="fatherName" ColumnName="fatherName" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="employee_Id" ColumnName="employee_Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Modules">
             <EntityTypeMapping TypeName="db_weavingModel.Modules">
               <MappingFragment StoreEntitySet="Modules">
@@ -446,11 +415,22 @@ warning 6002: The table/view 'db_weaving.dbo.AspNetUserRoles' does not have a pr
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="weavingUnit">
-            <EntityTypeMapping TypeName="db_weavingModel.weavingUnit">
-              <MappingFragment StoreEntitySet="weavingUnit">
-                <ScalarProperty Name="weavingUnitName" ColumnName="weavingUnitName" />
-                <ScalarProperty Name="weavingUnit_id" ColumnName="weavingUnit_id" />
+          <EntitySetMapping Name="grayProductList">
+            <EntityTypeMapping TypeName="db_weavingModel.grayProductList">
+              <MappingFragment StoreEntitySet="grayProductList">
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="LoomNumbRatePerBorderWithoutDraw96" ColumnName="LoomNumbRatePerBorderWithoutDraw96" />
+                <ScalarProperty Name="LoomNumbRatePerBorderWithDraw96" ColumnName="LoomNumbRatePerBorderWithDraw96" />
+                <ScalarProperty Name="LoomNumbPieceInBorder96" ColumnName="LoomNumbPieceInBorder96" />
+                <ScalarProperty Name="LoomNumbRatePerBorderWithoutDraw76" ColumnName="LoomNumbRatePerBorderWithoutDraw76" />
+                <ScalarProperty Name="LoomNumbRatePerBorderWithDraw76" ColumnName="LoomNumbRatePerBorderWithDraw76" />
+                <ScalarProperty Name="LoomNumbPieceInBorder76_" ColumnName="LoomNumbPieceInBorder76]" />
+                <ScalarProperty Name="graySizeppLength" ColumnName="graySizeppLength" />
+                <ScalarProperty Name="graySizeppWidth" ColumnName="graySizeppWidth" />
+                <ScalarProperty Name="PerPieceGrayWeightGram" ColumnName="PerPieceGrayWeightGram" />
+                <ScalarProperty Name="itemSize" ColumnName="itemSize" />
+                <ScalarProperty Name="itemName" ColumnName="itemName" />
+                <ScalarProperty Name="grayProduct_id" ColumnName="grayProduct_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -459,6 +439,41 @@ warning 6002: The table/view 'db_weaving.dbo.AspNetUserRoles' does not have a pr
               <MappingFragment StoreEntitySet="AspNetUserRoles">
                 <ScalarProperty Name="RoleId" ColumnName="RoleId" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="employeeList">
+            <EntityTypeMapping TypeName="db_weavingModel.employeeList">
+              <MappingFragment StoreEntitySet="employeeList">
+                <ScalarProperty Name="monthlySalary" ColumnName="monthlySalary" />
+                <ScalarProperty Name="weeklySalary" ColumnName="weeklySalary" />
+                <ScalarProperty Name="recruitmentType" ColumnName="recruitmentType" />
+                <ScalarProperty Name="employeeCnicBsck" ColumnName="employeeCnicBsck" />
+                <ScalarProperty Name="employeeCnicFront" ColumnName="employeeCnicFront" />
+                <ScalarProperty Name="employeePic2" ColumnName="employeePic2" />
+                <ScalarProperty Name="employeePic1" ColumnName="employeePic1" />
+                <ScalarProperty Name="designation" ColumnName="designation" />
+                <ScalarProperty Name="jobStatus" ColumnName="jobStatus" />
+                <ScalarProperty Name="referencePhoneNum" ColumnName="referencePhoneNum" />
+                <ScalarProperty Name="referenceName" ColumnName="referenceName" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="cnicNum" ColumnName="cnicNum" />
+                <ScalarProperty Name="homePhoneNum" ColumnName="homePhoneNum" />
+                <ScalarProperty Name="phoneNum3" ColumnName="phoneNum3" />
+                <ScalarProperty Name="phoneNum2" ColumnName="phoneNum2" />
+                <ScalarProperty Name="phoneNum1" ColumnName="phoneNum1" />
+                <ScalarProperty Name="fatherName" ColumnName="fatherName" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="employee_Id" ColumnName="employee_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="weavingUnit">
+            <EntityTypeMapping TypeName="db_weavingModel.weavingUnit">
+              <MappingFragment StoreEntitySet="weavingUnit">
+                <ScalarProperty Name="weavingUnitShortCode" ColumnName="weavingUnitShortCode" />
+                <ScalarProperty Name="weavingUnitName" ColumnName="weavingUnitName" />
+                <ScalarProperty Name="weavingUnit_id" ColumnName="weavingUnit_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -471,25 +486,6 @@ warning 6002: The table/view 'db_weaving.dbo.AspNetUserRoles' does not have a pr
                 <ScalarProperty Name="loomSize" ColumnName="loomSize" />
                 <ScalarProperty Name="loomNumber" ColumnName="loomNumber" />
                 <ScalarProperty Name="loom_id" ColumnName="loom_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="grayProductList">
-            <EntityTypeMapping TypeName="db_weavingModel.grayProductList">
-              <MappingFragment StoreEntitySet="grayProductList">
-                <ScalarProperty Name="status" ColumnName="status" />
-                <ScalarProperty Name="LoomNumbRatePerBorderWithoutDraw96" ColumnName="LoomNumbRatePerBorderWithoutDraw96" />
-                <ScalarProperty Name="LoomNumbRatePerBorderWithDraw96" ColumnName="LoomNumbRatePerBorderWithDraw96" />
-                <ScalarProperty Name="LoomNumbPieceInBorder96" ColumnName="LoomNumbPieceInBorder96" />
-                <ScalarProperty Name="LoomNumbRatePerBorderWithoutDraw76" ColumnName="LoomNumbRatePerBorderWithoutDraw76" />
-                <ScalarProperty Name="LoomNumbRatePerBorderWithDraw76" ColumnName="LoomNumbRatePerBorderWithDraw76" />
-                <ScalarProperty Name="LoomNumbPieceInBorder76" ColumnName="LoomNumbPieceInBorder76" />
-                <ScalarProperty Name="graySizeppWidth" ColumnName="graySizeppWidth" />
-                <ScalarProperty Name="graySizeppLength" ColumnName="graySizeppLength" />
-                <ScalarProperty Name="PerPieceGrayWeightGram" ColumnName="PerPieceGrayWeightGram" />
-                <ScalarProperty Name="itemSize" ColumnName="itemSize" />
-                <ScalarProperty Name="itemName" ColumnName="itemName" />
-                <ScalarProperty Name="grayProduct_id" ColumnName="grayProduct_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

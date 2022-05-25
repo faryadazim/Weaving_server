@@ -228,8 +228,10 @@
     <Compile Include="Controllers\BorderSizesController.cs" />
     <Compile Include="Controllers\employeeDesignationsController.cs" />
     <Compile Include="Controllers\employeeListsController.cs" />
+    <Compile Include="Controllers\xxemployeeListsController.cs" />
     <Compile Include="Controllers\FileUploadController.cs" />
     <Compile Include="Controllers\grayProductListsController.cs" />
+    <Compile Include="Controllers\xxgrayProductListsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoomListsController.cs" />
     <Compile Include="Controllers\ModulesController.cs" />

@@ -152,6 +152,22 @@ namespace test6EntityFrame.Controllers
             }
 
             db.Pages.Remove(pages);
+            var pagesPermissionDeleteAgainstPage = from permissionTable in db.PagePermission where permissionTable.PageId == id
+                                                   select permissionTable.PermissionId;
+
+            
+            foreach (var ch in pagesPermissionDeleteAgainstPage)
+            {
+
+
+                // here i'm trying to delete all pages permission crossponding to this permission id but i couldnot
+                //db.PagePermission.ForEachAsync.
+                //db.Database.SqlQuery<dynamic>("");
+
+            }
+
+
+
             db.SaveChanges();
 
             return Ok(pages);

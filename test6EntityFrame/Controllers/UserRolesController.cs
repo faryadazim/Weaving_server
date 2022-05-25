@@ -73,32 +73,24 @@ namespace test6EntityFrame.Controllers
 
         // POST: api/UserRoles
         [ResponseType(typeof(AspNetUserRoles))]
-        public IHttpActionResult PostAspNetUserRoles(AspNetUserRoles aspNetUserRoles)
+        public IHttpActionResult PostAspNetUserRoles(AspNetUserRoles UserRolePost)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
 
-            db.AspNetUserRoles.Add(aspNetUserRoles);
 
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateException)
-            {
-                if (AspNetUserRolesExists(aspNetUserRoles.UserId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
 
-            return CreatedAtRoute("DefaultApi", new { id = aspNetUserRoles.UserId }, aspNetUserRoles);
+
+            //try
+            //{
+            db.AspNetUserRoles.Add(UserRolePost);
+            db.SaveChanges();
+            //}
+            // catch (Exception ex)
+            //{
+            //    return NotFound();
+            //}
+
+            return Ok(UserRolePost);
+            //  return CreatedAtRoute("DefaultApi", new { id = aspNetUserRoles.UserId }, aspNetUserRoles);
         }
 
         // DELETE: api/UserRoles/5

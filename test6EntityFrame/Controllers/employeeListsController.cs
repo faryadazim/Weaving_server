@@ -16,12 +16,42 @@ namespace test6EntityFrame.Controllers
     {
         private db_weavingEntities db = new db_weavingEntities();
 
+     
         [Route("api/employeeLists")]
-        public HttpResponseMessage GetemployeeList()
-        {
-            return Request.CreateResponse(HttpStatusCode.OK, db.employeeList);
-        }
+            public HttpResponseMessage GetemployeeList()
+           {
+            //on PageTable.page_id equals PrTable.PageId
+                                         
+            var entity = from employeeTable in db.employeeList
+                         join designationTable in db.employeeDesignation  on employeeTable.designation equals designationTable.designation_id
+                         where employeeTable.designation == designationTable.designation_id select new
+            {
+                             employee_Id=employeeTable.employee_Id,
+                             name = employeeTable.name,
+                             fatherName=employeeTable.fatherName,
+                             phoneNum1=employeeTable.phoneNum1,
+                             phoneNum2=employeeTable.phoneNum2,
+                             phoneNum3=employeeTable.phoneNum3,
+                             homePhoneNum=employeeTable.homePhoneNum,
+                             cnicNum=employeeTable.cnicNum,
+                             address=employeeTable.address,
+                             referenceName=employeeTable.referenceName,
+                             referencePhoneNum=employeeTable.referencePhoneNum,
+                             jobStatus=employeeTable.jobStatus,
+                             designation=employeeTable.designation,
+                             employeePic1=employeeTable.employeePic1,
+                             employeePic2=employeeTable.employeePic2,
+                             employeeCnicFront=employeeTable.employeeCnicFront,
+                             employeeCnicBsck=employeeTable.employeeCnicBsck,
+                             recruitmentType=employeeTable.recruitmentType,
+                             weeklySalary=employeeTable.weeklySalary,
+                             monthlySalary=employeeTable.monthlySalary,
+                             designationName = designationTable.designationName
+            };
+             return Request.CreateResponse(HttpStatusCode.OK, entity);
+             }
 
+        // GET: api/employeeLists/5
         [Route("api/employeeListsById")]
         public HttpResponseMessage GetemployeeListById(int id)
         {
@@ -32,6 +62,47 @@ namespace test6EntityFrame.Controllers
             }
             return Request.CreateResponse(HttpStatusCode.OK, entity);
         }
+
+
+
+        //        [Route("api/employeeListsById")]
+
+
+       //All Weaver  Available list with Name
+       [Route ("api/employeeWeaverListWithName")]
+       public HttpResponseMessage GetAllWeaver()
+        {
+            var entity = from employeeListTable in db.employeeList
+                         where employeeListTable.designation == 6
+                         select new
+                         {
+                           employeeId=  employeeListTable.employee_Id,
+                          employeeName=   employeeListTable.name,
+                         };
+
+            if (entity == null)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Not Found");
+            }
+            else
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, entity);
+            }
+        }
+
+        [Route("api/employeeListsName")]
+        public HttpResponseMessage GetEmployeeListName()
+        {
+            var employeeList = from employeeTable in db.employeeList select new { employeeTable.name, employeeTable.employee_Id };
+
+            return Request.CreateResponse(HttpStatusCode.OK, employeeList);
+        }
+
+
+
+
+
+
 
         [Route("api/employeeLists")]
         public HttpResponseMessage PutemployeeList(employeeList employeeList)
@@ -79,16 +150,8 @@ namespace test6EntityFrame.Controllers
             }
         }
 
-        [Route ("api/employeeListsName")]
-        public HttpResponseMessage GetEmployeeListName()
-        {
-            var employeeList = from employeeTable in db.employeeList select new { employeeTable.name, employeeTable.employee_Id};
 
-            return Request.CreateResponse(HttpStatusCode.OK, employeeList);
-        }
-
-
-
+        //post 
         [Route("api/employeeLists")]
         public HttpResponseMessage PostemployeeList(employeeList employeeListForPost)
         {
@@ -106,6 +169,13 @@ namespace test6EntityFrame.Controllers
             }
         }
 
+
+
+
+
+
+
+        // DELETE: api/employeeLists/5 
         [Route("api/employeeLists")]
         public HttpResponseMessage DeleteemployeeList(int id)
         {

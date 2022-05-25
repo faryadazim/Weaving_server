@@ -26,13 +26,13 @@ namespace DAL
         public string referenceName { get; set; }
         public string referencePhoneNum { get; set; }
         public string jobStatus { get; set; }
-        public string designation { get; set; }
+        public int designation { get; set; }
         public string employeePic1 { get; set; }
         public string employeePic2 { get; set; }
         public string employeeCnicFront { get; set; }
         public string employeeCnicBsck { get; set; }
         public string recruitmentType { get; set; }
-        public string weeklySalary { get; set; }
-        public string monthlySalary { get; set; }
+        public Nullable<int> weeklySalary { get; set; }
+        public Nullable<int> monthlySalary { get; set; }
     }
 }
